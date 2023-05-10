@@ -1,3 +1,12 @@
 body {
     background-color: #000000;
 }
+
+.hacker {
+    background-color: black;
+    color: lime;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 5px;
+    border: 1px solid lime;
+  }
+  
