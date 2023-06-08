@@ -10,3 +10,96 @@ body {
     border: 1px solid lime;
   }
   
+button{
+    padding: 20px;
+    background-color: #000000;
+    color: lime;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    letter-spacing: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.5s;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 0 10px; /* Dar un poco de espacio entre botones */
+}
+
+button:hover{
+    background-color: lime;
+    color: #000000;
+    box-shadow: 0 0 5px lime,
+                0 0 25px lime,
+                0 0 50px lime,
+                0 0 200px lime;      
+}
+
+a{
+    text-decoration: none;
+}
+
+.container {
+    display: flex; /* Hacer que los elementos hijos (botones) se dispongan en línea */
+    justify-content: center; /* Centrar los elementos hijos (botones) horizontalmente */
+}
+
+.typing {
+    white-space: pre;  /* Asegura que los espacios y los saltos de línea se respeten. */
+    border-right: 2px solid;
+    overflow: hidden;  /* Asegura que el contenido no se desborde. */
+    margin: 0 auto;
+    letter-spacing: 1px; /* Espaciado entre letras. */
+    animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+  }
+  
+  /* Animación para simular el tipeo. */
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  /* Animación para simular el parpadeo del cursor. */
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: black; }
+  }
+
+  #console {
+    background-color: black;
+    color: lime;
+    width: 500px;
+    height: 300px;
+    overflow: auto;
+    padding: 10px;
+  }
+  
+  #input {
+    color: lime;
+    background-color: black;
+    outline: none;
+    border: none;
+    width: 80%;
+    display: inline;
+  }
+  
+  #output {
+    margin-bottom: 10px;
+  }
+  
+
+.tube-screen {
+    border: 10px solid #333; /* Grosor y color del marco de la pantalla */
+    border-radius: 25px; /* Bordas redondeadas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra alrededor de la pantalla */
+    background-color: black; /* Color de fondo de la pantalla */
+    color: lime; /* Color del texto */
+    padding: 20px; /* Espacio interior alrededor del contenido */
+    width: 500px; /* Ancho de la pantalla */
+    height: 300px; /* Altura de la pantalla */
+    overflow: hidden; 
+  }
+  
+  
