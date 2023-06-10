@@ -241,6 +241,7 @@ function meta(){
 meta();
 
 */
+// conecta con metamask
 function connectMeta() {
     return __awaiter(this, void 0, void 0, function* () {
         // @ts-ignore

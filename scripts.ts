@@ -259,6 +259,7 @@ meta();
 
 */
 
+// conecta con metamask
 async function connectMeta(){
   
     // @ts-ignore
