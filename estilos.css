@@ -72,7 +72,7 @@ a{
     color: lime;
     width: 500px;
     height: 300px;
-    overflow: auto;
+    overflow: hidden;
     padding: 10px;
   }
   
