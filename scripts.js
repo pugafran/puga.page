@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var ip;
+var wallet;
 function dox() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -94,6 +95,11 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             "cls": function () {
                 output.innerHTML = "";
+            }, "web3": function () {
+                const p = document.createElement("p");
+                p.textContent = "Inicializando web3...";
+                connectMeta();
+                output.appendChild(p);
             },
             "clear": function () {
                 commands["cls"]();
@@ -198,4 +204,54 @@ function obtenerSegundoArgumento(input) {
     else {
         return null;
     }
+}
+// crea código para un boton de metamask 
+/*
+function createMetamaskButton() {
+  const button = document.createElement("button");
+  button.textContent = "Conectar con Metamask";
+  button.className = "metamask-button";
+  button.addEventListener("click", async function () {
+
+    // @ts-ignore
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    const account = accounts[0];
+    wallet = account;
+    console.log(account);
+        // Mostrar la dirección de la billetera en la página
+        const addressContainer = document.getElementById("wallet-address");
+        if (addressContainer) {
+          addressContainer.textContent = "Dirección de la billetera: " + account;
+        }
+      });
+  
+
+  
+
+  return button;
+}
+
+function meta(){
+  const buttonContainer = document.getElementById("button-container");
+  //fix button is possibly null typescript errorr
+  if (buttonContainer)
+    buttonContainer.appendChild(createMetamaskButton());
+}
+
+meta();
+
+*/
+function connectMeta() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // @ts-ignore
+        const accounts = yield ethereum.request({ method: "eth_requestAccounts" });
+        const account = accounts[0];
+        wallet = account;
+        console.log(account);
+        // Mostrar la dirección de la billetera en la página
+        const addressContainer = document.getElementById("wallet-address");
+        if (addressContainer) {
+            addressContainer.textContent = "Dirección de la billetera: " + account;
+        }
+    });
 }

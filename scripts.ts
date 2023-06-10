@@ -1,4 +1,5 @@
 var ip;
+var wallet;
 async function dox() {
   try {
     const response = await fetch("https://ipapi.co/json/");
@@ -84,6 +85,11 @@ function isVPN(ipAddress: string) {
       },
       "cls": function () {
         output.innerHTML = "";
+      },      "web3": function () {
+        const p = document.createElement("p");
+        p.textContent = "Inicializando web3...";
+        connectMeta();
+        output.appendChild(p);
       },
       "clear": function () {
         commands["cls"]();
@@ -214,5 +220,56 @@ function isVPN(ipAddress: string) {
       return null;
     }
   }
+
+// crea código para un boton de metamask 
+
+/*
+function createMetamaskButton() {
+  const button = document.createElement("button");
+  button.textContent = "Conectar con Metamask";
+  button.className = "metamask-button";
+  button.addEventListener("click", async function () {
+
+    // @ts-ignore
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    const account = accounts[0];
+    wallet = account;
+    console.log(account);
+        // Mostrar la dirección de la billetera en la página
+        const addressContainer = document.getElementById("wallet-address");
+        if (addressContainer) {
+          addressContainer.textContent = "Dirección de la billetera: " + account;
+        }
+      });
   
+
   
+
+  return button;
+}
+
+function meta(){
+  const buttonContainer = document.getElementById("button-container");
+  //fix button is possibly null typescript errorr
+  if (buttonContainer)
+    buttonContainer.appendChild(createMetamaskButton());
+}
+
+meta();
+
+*/
+
+async function connectMeta(){
+  
+    // @ts-ignore
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    const account = accounts[0];
+    wallet = account;
+    console.log(account);
+        // Mostrar la dirección de la billetera en la página
+        const addressContainer = document.getElementById("wallet-address");
+        if (addressContainer) {
+          addressContainer.textContent = "Dirección de la billetera: " + account;
+        }
+    
+}
