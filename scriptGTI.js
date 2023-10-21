@@ -271,7 +271,7 @@ function verificarRespuesta(indice) {
         mostrarResultado(); // Mostrar resultados al finalizar
     }
 }
-
+ 
 function mostrarResultado() {
     
     const mensajeError = document.getElementById("mensaje-error");
