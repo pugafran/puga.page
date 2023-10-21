@@ -260,17 +260,29 @@ meta();
 */
 
 // conecta con metamask
-async function connectMeta(){
-  
+async function connectMeta() {
+  try {
     // @ts-ignore
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     const account = accounts[0];
     wallet = account;
     console.log(account);
-        // Mostrar la dirección de la billetera en la página
-        const addressContainer = document.getElementById("wallet-address");
-        if (addressContainer) {
-          addressContainer.textContent = "Dirección de la billetera: " + account;
-        }
     
+    // Mostrar la dirección de la billetera en la página
+    const addressContainer = document.getElementById("wallet-address");
+    if (addressContainer) {
+      addressContainer.textContent = "Dirección de la billetera: " + account;
+    }
+  } catch (error) {
+    console.error("Error al conectar con MetaMask:", error);
+    
+    // Mostrar mensaje de error en la página
+    const addressContainer = document.getElementById("output");
+    if (addressContainer) {
+      
+      const p = document.createElement("p");
+     p.textContent = "Error al conectar con MetaMask ❌";
+     addressContainer.appendChild(p);
+    }
+  }
 }
