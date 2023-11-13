@@ -1,16 +1,30 @@
 
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+
+.calendar-container {
+    position: relative;
+    width: 100%; /* Asegura que ocupa todo el ancho disponible */
+    padding-top: 50%; /* Ajusta esto para cambiar la relación de aspecto */
+    overflow: hidden;
 }
 
-iframe {
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
-    border-radius: 10px;
-    overflow: hidden;
+
+
+.calendar-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    border: 0;
+}
+@media (max-width: 768px) {
+    .calendar-container {
+        padding-top: 75%; /* Mayor altura para pantallas más estrechas */
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar-container {
+        padding-top: 100%; /* Aún más alto para teléfonos en modo vertical */
+    }
 }
