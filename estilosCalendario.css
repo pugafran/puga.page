@@ -4,7 +4,7 @@
     position: relative;
     width: 100%; /* Asegura que ocupa todo el ancho disponible */
     overflow: hidden;
-    height: 60vh; /* Ajuste inicial, se puede modificar según sea necesario */
+    height: 100vh; /* Ajuste inicial, se puede modificar según sea necesario */
 }
 
 
