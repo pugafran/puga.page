@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             "projects": function() {
                 console.log("Comando 'projects' activado"); // Mensaje de diagnóstico
-        
+            
                 const projectsContainer = document.getElementById("projects-container");
                 projectsContainer.classList.add("hacker");
                 if (!projectsContainer) {
@@ -106,31 +106,39 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 
                 projectsContainer.innerHTML = ''; // Limpia el contenedor
-        
+            
                 const projects = [
-                    { name: "Controldiabetes", description: "Description for Project 1." },
-                    { name: "Gestor de nodos de Lukso", description: "Description for Project 2." },
-                    { name: "Project 3", description: "Description for Project 3." },
+                    { name: "Controldiabetes", description: "Description for Project 1.", images: [] },
+                    { name: "Gestor de nodos de Lukso", description: "Description for Project 2.", images: ["flask.png", "python.png", "web3js.png"] }, // Arreglo de imágenes
+                    { name: "Project 3", description: "Description for Project 3.", images: [] },
                     // Agrega más proyectos aquí
                 ];
-        
+            
                 projects.forEach(project => {
                     const projectDiv = document.createElement("div");
                     projectDiv.className = "project";
-        
+            
                     const projectName = document.createElement("h3");
                     projectName.textContent = project.name;
                     projectDiv.appendChild(projectName);
-        
+            
+                    project.images.forEach(imageSrc => { // Itera sobre el arreglo de imágenes
+                        const projectImage = document.createElement("img");
+                        projectImage.src = imageSrc;
+                        projectImage.style = "width: 60px; height: 30px; margin: 5px;"; // Estilos para cada imagen
+                        projectDiv.appendChild(projectImage);
+                    });
+            
                     const projectDesc = document.createElement("p");
                     projectDesc.textContent = project.description;
                     projectDiv.appendChild(projectDesc);
-        
+            
                     projectsContainer.appendChild(projectDiv);
                 });
-        
+            
                 console.log("Proyectos agregados al contenedor");
             },
+            
         
             "cls": function () {
                 output.innerHTML = "";
