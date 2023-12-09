@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const projects = [
                     { name: "Controldiabetes", description: "Web dedicada a mejorar la vida de las personas que viven con diabetes. El objetivo es proporcionar herramientas y recursos que ayuden a las personas con diabetes a manejar su condición de manera efectiva y vivir una vida saludable.", images: ["quagga.png"] },
                     { name: "Gestor de nodos de Lukso", description: "Aplicación web basada en Flask diseñada para la gestión remota de un nodo LUKSO en un servidor Ubuntu. Ofrece una interfaz intuitiva para la autenticación de usuarios, permitiendo solo a usuarios autorizados realizar operaciones críticas como iniciar, detener y reiniciar el nodo. La aplicación se integra con el servidor a través de SSH, proporcionando una forma segura y eficiente de monitorear el estado del nodo y ejecutar comandos relevantes. Con énfasis en la seguridad y la facilidad de uso, esta solución es ideal para administradores de sistemas y entusiastas de blockchain que buscan un método accesible y eficiente para gestionar nodos LUKSO.", images: ["flask.png", "python.png", "web3js.png"] }, // Arreglo de imágenes
-                    { name: "Project 3", description: "Description for Project 3.", images: [] },
+                    { name: "Prácticas Solidity", description: "Description for Project 3.", images: ["solidity.svg"] },
                     // Agrega más proyectos aquí
                 ];
             
