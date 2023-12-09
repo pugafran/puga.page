@@ -81,9 +81,23 @@ a{
     background-color: black;
     outline: none;
     border: none;
-    width: 80%;
+    margin-right: 1px; /* Asegúrate de que este margen no sea demasiado grande */
+    width: auto; /* O un ancho específico que funcione para tu diseño */
     display: inline;
   }
+
+  #prompt {
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Evita que los elementos se envuelvan en líneas múltiples */
+}
+
+#autocomplete-suggestion {
+    color: #555;
+    margin-left: 0; /* Elimina cualquier margen extra */
+
+}
+
   
   #output {
     margin-bottom: 10px;
@@ -100,9 +114,20 @@ a{
     width: 500px; /* Ancho de la pantalla */
     height: 300px; /* Altura de la pantalla */
     overflow: hidden; 
+    display: block;
   }
   
   #connect-button {
     padding: 10px 20px;
     font-size: 20px;
 } 
+
+#projects-container {
+  width: calc(100% - 20px); /* Ajusta el ancho al 100% menos el padding total horizontal */
+  max-width: 1024px; /* O el ancho máximo que prefieras */
+  margin: 20px auto; /* Espacio superior e inferior, y auto para centrar horizontalmente */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+

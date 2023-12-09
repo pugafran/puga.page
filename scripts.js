@@ -58,6 +58,8 @@ function dox() {
 }
 // Resto del código ...
 //onload="dox();"
+
+const autocompleteSuggestion = document.getElementById("autocomplete-suggestion");
 function isVPN(ipAddress) {
     const octets = ipAddress.split('.');
     if (octets.length !== 4) {
@@ -93,6 +95,43 @@ document.addEventListener("DOMContentLoaded", function () {
                 response.textContent = "¡Hola a ti también!";
                 output.appendChild(response);
             },
+            "projects": function() {
+                console.log("Comando 'projects' activado"); // Mensaje de diagnóstico
+        
+                const projectsContainer = document.getElementById("projects-container");
+                projectsContainer.classList.add("hacker");
+                if (!projectsContainer) {
+                    console.error("No se encontró el elemento 'projects-container'");
+                    return;
+                }
+                
+                projectsContainer.innerHTML = ''; // Limpia el contenedor
+        
+                const projects = [
+                    { name: "Controldiabetes", description: "Description for Project 1." },
+                    { name: "Gestor de nodos de Lukso", description: "Description for Project 2." },
+                    { name: "Project 3", description: "Description for Project 3." },
+                    // Agrega más proyectos aquí
+                ];
+        
+                projects.forEach(project => {
+                    const projectDiv = document.createElement("div");
+                    projectDiv.className = "project";
+        
+                    const projectName = document.createElement("h3");
+                    projectName.textContent = project.name;
+                    projectDiv.appendChild(projectName);
+        
+                    const projectDesc = document.createElement("p");
+                    projectDesc.textContent = project.description;
+                    projectDiv.appendChild(projectDesc);
+        
+                    projectsContainer.appendChild(projectDiv);
+                });
+        
+                console.log("Proyectos agregados al contenedor");
+            },
+        
             "cls": function () {
                 output.innerHTML = "";
             }, "web3": function () {
@@ -154,15 +193,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 output.innerHTML += treeHTML;
             }
         };
+
+        function updateAutocompleteSuggestion() {
+            const inputText = input.value;
+            autocompleteSuggestion.textContent = ''; // Limpia la sugerencia anterior.
+            if (inputText.trim() !== "") {
+                const matchingCommands = Object.keys(commands).filter(cmd => cmd.startsWith(inputText));
+                if (matchingCommands.length === 1) {
+                    // Muestra la parte del comando que falta para completarse.
+                    const suggestion = matchingCommands[0].substring(inputText.length);
+                    autocompleteSuggestion.textContent = suggestion;
+                }
+            }
+        }
+
+        input.addEventListener("input", updateAutocompleteSuggestion);
+
         consoleDiv.addEventListener("mousedown", function () {
-            setTimeout(function () {
-                input.focus();
-            }, 10);
+            setTimeout(function () { input.focus(); }, 10);
         });
+
         input.addEventListener("keydown", function (e) {
             if (e.key === "Enter") {
                 const command = input.value;
                 input.value = "";
+                autocompleteSuggestion.textContent = ''; // Limpia la sugerencia.
                 if (command.trim() === "" && isFirstEnter) {
                     isFirstEnter = false;
                     return;
@@ -176,26 +231,28 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (typeof commandFunction === 'function') {
                         commandFunction();
                     }
-                }
-                else {
+                } else {
                     const p = document.createElement("p");
                     p.textContent = "Comando desconocido: " + command;
                     output.appendChild(p);
                 }
-            }
-            else if (e.key === "Tab") {
+            } else if (e.key === "Tab") {
                 e.preventDefault();
                 const inputText = input.value;
                 if (inputText.trim() !== "") {
                     const matchingCommands = Object.keys(commands).filter(cmd => cmd.startsWith(inputText));
                     if (matchingCommands.length === 1) {
                         input.value = matchingCommands[0];
+                        autocompleteSuggestion.textContent = ''; // Limpia la sugerencia.
                     }
                 }
             }
         });
     });
 });
+
+
+
 function obtenerSegundoArgumento(input) {
     const palabras = input.split(' ');
     if (palabras.length >= 2) {
@@ -268,3 +325,5 @@ function connectMeta() {
         }
     });
 }
+
+
