@@ -1,3 +1,6 @@
+
+
+
 body {
     background-color: #000000;
 }
@@ -131,3 +134,63 @@ a{
 }
 
 
+.spiral{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spiral{
+  0%{
+    --angle: 0deg;
+  }
+  
+  100%{
+    --angle: 360deg;
+  }
+}
+
+.character{
+  color: lime;
+  font-size: 4em;
+  transform: translateY(calc(sin(var(--angle))* 100px)) scale(calc(cos(var(--angle)) * 0.5 + 0.5)); 
+  animation: spiral 4s linear infinite;
+}
+
+.centrador{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/*
+img:hover {
+  box-shadow: 0 0 15px lime;  
+  transition: box-shadow 0.3s ease;
+}
+*/
+
+@media screen and (max-width: 768px) {
+  /* Estilos para pantallas pequeñas (como teléfonos móviles) */
+  .container {
+      flex-direction: column; /* Apila los botones verticalmente */
+  }
+
+  #console, .tube-screen {
+      width: 100%; /* Ajusta el ancho al tamaño de la pantalla */
+      height: auto; /* Altura automática para evitar cortes */
+  }
+
+  .button {
+      padding: 10px; /* Menor tamaño de botón para pantallas pequeñas */
+      font-size: 14px; /* Tamaño de letra más pequeño */
+  }
+}

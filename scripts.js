@@ -59,6 +59,28 @@ function dox() {
 // Resto del código ...
 //onload="dox();"
 
+
+
+
+
+const words = "Welcome to puga page"
+
+const ANIMATION_DURATION = 4000;
+
+const characters = words.split("").forEach((char, i) => {
+    function createElement(offset){
+        const div = document.createElement("div");
+        div.innerText = char;
+        div.classList.add("character");
+        div.style.animationDelay = `-${i * (ANIMATION_DURATION / 16) - offset}ms`;
+
+        return div;
+    }
+
+    document.getElementById("spiral").append(createElement(0));
+    document.getElementById("spiral2").append(createElement(-1 * (ANIMATION_DURATION / 2)));
+});
+
 const autocompleteSuggestion = document.getElementById("autocomplete-suggestion");
 function isVPN(ipAddress) {
     const octets = ipAddress.split('.');
@@ -334,4 +356,37 @@ function connectMeta() {
     });
 }
 
+const canvas = document.getElementById('matrixRain');
+const ctx = canvas.getContext('2d');
 
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+for (let x = 0; x < columns; x++) {
+    drops[x] = 1;
+}
+
+function drawMatrixRain() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = '#33ff33';
+    ctx.font = fontSize + 'px Courier New';
+    
+    for (let i = 0; i < drops.length; i++) {
+        const text = symbols.charAt(Math.floor(Math.random() * symbols.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+
+setInterval(drawMatrixRain, 33);
