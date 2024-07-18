@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de explotación laboral de Catalina</title>
+    <title>Calculadora y Traductor de Catalina</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,6 +22,28 @@
         h1 {
             text-align: center;
             color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            flex: 1;
+            margin: 0 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff1493;
         }
         .day {
             display: flex;
@@ -38,19 +60,8 @@
             padding: 5px;
             background-color: #ffe4e1;
         }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #ff69b4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #ff1493;
+        .hidden {
+            display: none;
         }
         .result {
             margin-top: 20px;
@@ -63,48 +74,104 @@
             display: block;
             margin-bottom: 5px;
         }
+        .translator {
+            text-align: center;
+        }
+        .translator textarea {
+            width: 100%;
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #ffe4e1;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .translator .lang-select {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .translator select {
+            width: 48%;
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: #ffe4e1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de explotación laboral de Catalina</h1>
-        <div class="day">
-            <label for="lunes">Lunes:</label>
-            <input type="number" id="lunes" min="0" max="24">
+        <h1>Calculadora y Traductor de Catalina</h1>
+        <div class="buttons">
+            <button onclick="showSection('calculator')">Calculadora</button>
+            <button onclick="showSection('translator')">Traductor</button>
         </div>
-        <div class="day">
-            <label for="martes">Martes:</label>
-            <input type="number" id="martes" min="0" max="24">
+
+        <div id="calculator">
+            <div class="day">
+                <label for="lunes">Lunes:</label>
+                <input type="number" id="lunes" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="martes">Martes:</label>
+                <input type="number" id="martes" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="miércoles">Miércoles:</label>
+                <input type="number" id="miércoles" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="jueves">Jueves:</label>
+                <input type="number" id="jueves" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="viernes">Viernes:</label>
+                <input type="number" id="viernes" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="sábado">Sábado:</label>
+                <input type="number" id="sábado" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="domingo">Domingo:</label>
+                <input type="number" id="domingo" min="0" max="24">
+            </div>
+            <div class="day">
+                <label for="incluir-fines">Incluir fines de semana:</label>
+                <input type="checkbox" id="incluir-fines">
+            </div>
+            <button onclick="calcularHoras()">Calcular</button>
+            <div class="result" id="result"></div>
         </div>
-        <div class="day">
-            <label for="miércoles">Miércoles:</label>
-            <input type="number" id="miércoles" min="0" max="24">
+
+        <div id="translator" class="hidden translator">
+            <textarea id="inputText" rows="4" placeholder="Introduce texto en inglés, español o islandés"></textarea>
+            <div class="lang-select">
+                <select id="sourceLang">
+                    <option value="en">Inglés</option>
+                    <option value="es">Español</option>
+                    <option value="is">Islandés</option>
+                </select>
+                <select id="targetLang">
+                    <option value="is">Islandés</option>
+                    <option value="en">Inglés</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+            <button onclick="translateText()">Traducir</button>
+            <h2>Traducción</h2>
+            <p id="outputText"></p>
         </div>
-        <div class="day">
-            <label for="jueves">Jueves:</label>
-            <input type="number" id="jueves" min="0" max="24">
-        </div>
-        <div class="day">
-            <label for="viernes">Viernes:</label>
-            <input type="number" id="viernes" min="0" max="24">
-        </div>
-        <div class="day">
-            <label for="sábado">Sábado:</label>
-            <input type="number" id="sábado" min="0" max="24">
-        </div>
-        <div class="day">
-            <label for="domingo">Domingo:</label>
-            <input type="number" id="domingo" min="0" max="24">
-        </div>
-        <div class="day">
-            <label for="incluir-fines">Incluir fines de semana:</label>
-            <input type="checkbox" id="incluir-fines">
-        </div>
-        <button onclick="calcularHoras()">Calcular</button>
-        <div class="result" id="result"></div>
     </div>
 
     <script>
+        function showSection(section) {
+            document.getElementById('calculator').classList.add('hidden');
+            document.getElementById('translator').classList.add('hidden');
+            document.getElementById(section).classList.remove('hidden');
+        }
+
         function calcularHoras() {
             const totalHorasSemana = 30;
             let horasTrabajadas = 0;
@@ -135,6 +202,29 @@
             } else {
                 resultadoDiv.innerHTML += `<span>Ya has completado las horas requeridas para esta semana.</span>`;
             }
+        }
+
+        async function translateText() {
+            const text = document.getElementById('inputText').value;
+            const sourceLang = document.getElementById('sourceLang').value;
+            const targetLang = document.getElementById('targetLang').value;
+            const apiKey = 'AIzaSyBBVefIVeDyUxItFo3FFmZRnFYMygCsCfA';
+
+            const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    q: text,
+                    source: sourceLang,
+                    target: targetLang,
+                    format: 'text'
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById('outputText').innerText = data.data.translations[0].translatedText;
         }
     </script>
 </body>
