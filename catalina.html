@@ -98,6 +98,27 @@
             padding: 5px;
             background-color: #ffe4e1;
         }
+        .converter {
+            text-align: center;
+        }
+        .converter input {
+            width: calc(50% - 10px);
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #ffe4e1;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .converter select {
+            width: calc(50% - 10px);
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #ffe4e1;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -106,6 +127,7 @@
         <div class="buttons">
             <button onclick="showSection('calculator')">Calculadora</button>
             <button onclick="showSection('translator')">Traductor</button>
+            <button onclick="showSection('converter')">Conversor de Moneda</button>
         </div>
 
         <div id="calculator">
@@ -163,12 +185,25 @@
             <h2>Traducción</h2>
             <p id="outputText"></p>
         </div>
+
+        <div id="converter" class="hidden converter">
+            <h2>Conversor de Moneda</h2>
+            <input type="number" id="amount" placeholder="Cantidad">
+            <select id="currency">
+                <option value="ISK">Coronas Islandesas (ISK) a Euros (EUR)</option>
+                <option value="EUR">Euros (EUR) a Coronas Islandesas (ISK)</option>
+            </select>
+            <button onclick="convertCurrency()">Convertir</button>
+            <h2>Resultado</h2>
+            <p id="conversionResult"></p>
+        </div>
     </div>
 
     <script>
         function showSection(section) {
             document.getElementById('calculator').classList.add('hidden');
             document.getElementById('translator').classList.add('hidden');
+            document.getElementById('converter').classList.add('hidden');
             document.getElementById(section).classList.remove('hidden');
         }
 
@@ -225,6 +260,22 @@
 
             const data = await response.json();
             document.getElementById('outputText').innerText = data.data.translations[0].translatedText;
+        }
+
+        async function convertCurrency() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const currency = document.getElementById('currency').value;
+            let result;
+
+            if (currency === 'ISK') {
+                const rate = 0.0068; // Example rate, 1 ISK = 0.0068 EUR
+                result = (amount * rate).toFixed(2) + ' EUR';
+            } else if (currency === 'EUR') {
+                const rate = 147.36; // Example rate, 1 EUR = 147.36 ISK
+                result = (amount * rate).toFixed(2) + ' ISK';
+            }
+
+            document.getElementById('conversionResult').innerText = result;
         }
     </script>
 </body>
