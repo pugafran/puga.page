@@ -348,13 +348,17 @@ const questions = [
             document.getElementById("question").innerText = questions[currentQuestion].question;
             document.getElementById("options").innerHTML = "";
 
-            questions[currentQuestion].options.forEach(option => {
+            // Clonar el array de opciones para que no se modifiquen las originales
+            let shuffledOptions = [...questions[currentQuestion].options];
+            shuffleArray(shuffledOptions); // Mezclar respuestas antes de mostrarlas
+
+            shuffledOptions.forEach(option => {
                 const button = document.createElement("button");
                 button.innerText = option;
                 button.onclick = () => checkAnswer(option);
                 document.getElementById("options").appendChild(button);
             });
-        }
+}
 
         function checkAnswer(selectedOption) {
             if (selectedOption === questions[currentQuestion].answer) {
