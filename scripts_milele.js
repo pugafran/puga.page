@@ -25,6 +25,49 @@
         });
     }
 
+    // Función para obtener parámetros de la URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Intento automático de login si hay username y password en la URL
+async function autoLogin() {
+    const username = getQueryParam("username");
+    const password = getQueryParam("password");
+
+    if (username && password) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ username, password }),
+                mode: 'cors'
+            });
+
+            if (!response.ok) throw new Error('Error de autenticación');
+
+            const data = await response.json();
+            localStorage.setItem('access_token', data.access_token);
+
+            // Redirigir a la vista principal tras autenticación exitosa
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('map').style.display = 'block';
+            document.getElementById('toggleFormButton').style.display = 'block';
+
+            await loadPois();
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+}
+
+// Ejecutar autoLogin cuando la página cargue
+window.addEventListener('load', autoLogin);
+
+
     // Crear contenido de InfoWindow con botón de eliminar
     function createInfoContent(data, key) {
         const typeClassMap = {
