@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa de Recuerdos</title>
+    <link rel="stylesheet" type="text/css" href="estilo_milele.css">
+    <style>
+        /* Estilos mejorados */
+        .info-window {
+            padding: 15px;
+            min-width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .info-window.cita {
+            background: #ffe6f0;
+            border: 2px solid #ff69b4;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #iconContainer[data-type="restaurant"]::before { content: '🍴'; }
+        #iconContainer[data-type="landmark"]::before { content: '🏛️'; }
+        #iconContainer[data-type="activity"]::before { content: '🎯'; }
+        #iconContainer[data-type="other"]::before { content: '❤️'; }
+    </style>
+</head>
+<body>
+    <!-- Contenedor login -->
+    <div id="loginContainer">
+        <h2>Nuestros Lugares Especiales ❤️</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Tu nombre" required>
+            <input type="password" id="password" placeholder="Nuestra clave secreta" required>
+            <button type="submit">Acceder a nuestros recuerdos</button>
+        </form>
+    </div>
+
+    <!-- Interfaz principal -->
+    <button id="toggleFormButton" style="display: none;">➕ Nuevo Recuerdo</button>
+    
+    <div id="formContainer" style="display: none;">
+        <div id="iconContainer" data-type="other"></div>
+        <form id="poiForm">
+            <input type="text" id="placeName" placeholder="¿Dónde fue?" required>
+            <input type="text" id="title" placeholder="Título del momento (ej. 'Nuestra primera cita')">
+            <textarea id="description" placeholder="Descripción del recuerdo..."></textarea>
+            
+            <div class="coords">
+                <input type="text" id="latitude" placeholder="Latitud" readonly>
+                <input type="text" id="longitude" placeholder="Longitud" readonly>
+            </div>
+
+            <input type="date" id="date" required>
+            
+            <select id="type">
+                <option value="other">❤️ Cita especial</option>
+                <option value="restaurant">🍴 Restaurante</option>
+                <option value="landmark">🏛️ Lugar emblemático</option>
+                <option value="activity">🎯 Actividad divertida</option>
+            </select>
+
+            <div id="ratingContainer">
+                <input type="number" id="rating" min="1" max="5" placeholder="Calificación (1-5)" style="display: none;">
+            </div>
+
+            <button type="submit">Guardar recuerdo</button>
+            <button type="button" id="closeFormButton">Cerrar</button>
+        </form>
+    </div>
+
+    <div id="map" style="display: none;"></div>
+
+    <script src="scripts_milele.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhkkN1AbiBgK0Nc2nUiWAW-r2RAfNXLNk&callback=initMap">
+
+    </script>
+</body>
+</html>
