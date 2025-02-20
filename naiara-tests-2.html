@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de unidad 4 : Digitalización</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .options button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .review-container {
+            margin-top: 15px;
+            padding: 15px;
+            background: #ffecec;
+            border-radius: 8px;
+            display: none;
+            text-align: left;
+            border: 1px solid #ff9999;
+        }
+        .review-container h3 {
+            color: #d9534f;
+        }
+        .review-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 5px solid #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+        <div id="result" class="result"></div>
+        <div id="score" class="result" style="display:none;"></div>
+        <button id="reviewButton" style="display:none; margin-top:10px;" onclick="reviewIncorrect()">Revisar respuestas incorrectas</button>
+        <div id="review" class="review-container">
+            <h3>Respuestas incorrectas:</h3>
+            <div id="reviewContent"></div>
+        </div>
+    </div>
+
+    <script>
+const questions = [
+    {
+        question: "¿Qué son las tecnologías inmersivas?",
+        options: [
+            "Tecnologías que integran elementos digitales para experiencias sensoriales",
+            "Sistemas de almacenamiento en la nube",
+            "Redes de comunicación 5G",
+            "Software de gestión empresarial"
+        ],
+        answer: "Tecnologías que integran elementos digitales para experiencias sensoriales"
+    },
+    {
+        question: "¿Cuál es una de las aplicaciones principales de la realidad virtual (RV)?",
+        options: [
+            "Gestión de datos en la nube",
+            "Simulación de entornos reales o imaginarios",
+            "Automatización de procesos industriales",
+            "Análisis financiero"
+        ],
+        answer: "Simulación de entornos reales o imaginarios"
+    },
+    {
+        question: "¿Qué diferencia principal existe entre la realidad aumentada (RA) y la realidad virtual (RV)?",
+        options: [
+            "La RA sustituye completamente el mundo real",
+            "La RV integra elementos digitales en el entorno real",
+            "La RV sumerge al usuario en un mundo digital, mientras que la RA añade elementos virtuales al entorno real",
+            "La RA solo se usa para videojuegos"
+        ],
+        answer: "La RV sumerge al usuario en un mundo digital, mientras que la RA añade elementos virtuales al entorno real"
+    },
+    {
+        question: "¿Qué es el Big Data?",
+        options: [
+            "Un conjunto de datos extremadamente grandes y complejos",
+            "Un sistema de almacenamiento en la nube",
+            "Un software de edición de imágenes",
+            "Un lenguaje de programación"
+        ],
+        answer: "Un conjunto de datos extremadamente grandes y complejos"
+    },
+    {
+        question: "¿Cuál es una de las características del Big Data?",
+        options: [
+            "Baja velocidad de procesamiento",
+            "Datos pequeños y estructurados",
+            "Gran volumen, velocidad y variedad de datos",
+            "Uso exclusivo en el sector financiero"
+        ],
+        answer: "Gran volumen, velocidad y variedad de datos"
+    },
+    {
+        question: "¿Qué tecnología permite registrar datos de forma segura y transparente mediante bloques interconectados?",
+        options: [
+            "Blockchain",
+            "Internet de las cosas (IoT)",
+            "Realidad virtual",
+            "Redes 5G"
+        ],
+        answer: "Blockchain"
+    },
+    {
+        question: "¿Cuál es uno de los principales beneficios del Blockchain?",
+        options: [
+            "Centralización de datos",
+            "Transparencia e inmutabilidad",
+            "Almacenamiento de imágenes",
+            "Edición de videos en la nube"
+        ],
+        answer: "Transparencia e inmutabilidad"
+    },
+    {
+        question: "¿Qué es la inteligencia artificial (IA)?",
+        options: [
+            "Un sistema que permite a las máquinas realizar tareas que requieren inteligencia humana",
+            "Un software de edición de texto",
+            "Una tecnología de almacenamiento de datos",
+            "Un tipo de hardware especializado en videojuegos"
+        ],
+        answer: "Un sistema que permite a las máquinas realizar tareas que requieren inteligencia humana"
+    },
+    {
+        question: "¿Qué tipo de inteligencia artificial se especializa en tareas específicas, como reconocimiento de voz o recomendación de productos?",
+        options: [
+            "Inteligencia artificial general",
+            "Inteligencia artificial estrecha",
+            "Big Data",
+            "Realidad virtual"
+        ],
+        answer: "Inteligencia artificial estrecha"
+    },
+    {
+        question: "¿Cuál es una de las aplicaciones principales de la IA generativa?",
+        options: [
+            "Creación de contenido como texto, imágenes y música",
+            "Almacenamiento de información en bases de datos",
+            "Transmisión de datos en redes 5G",
+            "Gestión de finanzas personales"
+        ],
+        answer: "Creación de contenido como texto, imágenes y música"
+    },
+    {
+        question: "¿Cuál es una medida de ciberseguridad recomendada para proteger los sistemas empresariales?",
+        options: [
+            "Usar la misma contraseña en todas las cuentas",
+            "No actualizar los sistemas operativos",
+            "Activar la autenticación de dos factores (2FA)",
+            "Deshabilitar el antivirus para mejorar el rendimiento"
+        ],
+        answer: "Activar la autenticación de dos factores (2FA)"
+    },
+    {
+        question: "¿Qué práctica de ciberseguridad ayuda a prevenir ataques y vulnerabilidades?",
+        options: [
+            "No realizar copias de seguridad",
+            "Actualizar los sistemas regularmente",
+            "Usar redes WiFi públicas sin precaución",
+            "Compartir contraseñas con compañeros de trabajo"
+        ],
+        answer: "Actualizar los sistemas regularmente"
+    },
+    {
+        question: "¿Cuál es una ventaja de la fabricación aditiva (impresión 3D)?",
+        options: [
+            "Mayor consumo de materiales",
+            "Producción de estructuras complejas de manera eficiente",
+            "Dependencia total de la fabricación tradicional",
+            "Mayor desperdicio de recursos"
+        ],
+        answer: "Producción de estructuras complejas de manera eficiente"
+    },
+    {
+        question: "¿Qué tecnología permite la simulación digital de procesos y sistemas físicos para optimizar su rendimiento?",
+        options: [
+            "Gemelos digitales",
+            "Blockchain",
+            "Big Data",
+            "Realidad aumentada"
+        ],
+        answer: "Gemelos digitales"
+    },
+    {
+        question: "¿Cuál es una de las características clave del Internet de las cosas (IoT)?",
+        options: [
+            "Conectividad ubicua y recopilación de datos en tiempo real",
+            "Uso exclusivo en la industria del entretenimiento",
+            "Funcionamiento sin conexión a Internet",
+            "Almacenamiento de datos en dispositivos físicos"
+        ],
+        answer: "Conectividad ubicua y recopilación de datos en tiempo real"
+    },{
+        question: "¿Qué son las tecnologías inmersivas?",
+        options: [
+            "Tecnologías que integran elementos digitales para experiencias sensoriales",
+            "Sistemas de almacenamiento en la nube",
+            "Redes de comunicación 5G",
+            "Software de gestión empresarial"
+        ],
+        answer: "Tecnologías que integran elementos digitales para experiencias sensoriales"
+    },
+    {
+        question: "¿Cuál es una de las aplicaciones principales de la realidad virtual (RV)?",
+        options: [
+            "Gestión de datos en la nube",
+            "Simulación de entornos reales o imaginarios",
+            "Automatización de procesos industriales",
+            "Análisis financiero"
+        ],
+        answer: "Simulación de entornos reales o imaginarios"
+    },
+    {
+        question: "¿Qué función tiene la alineación estratégica en una empresa?",
+        options: [
+            "Sincronizar recursos y capacidades con metas a largo plazo",
+            "Reducir costos sin importar la calidad",
+            "Sustituir empleados por inteligencia artificial",
+            "Evitar la digitalización de procesos"
+        ],
+        answer: "Sincronizar recursos y capacidades con metas a largo plazo"
+    },
+    {
+        question: "¿Qué beneficio ofrece la inteligencia artificial en la toma de decisiones empresariales?",
+        options: [
+            "Genera datos aleatorios para mejorar la productividad",
+            "Facilita el análisis de datos y predicción de tendencias",
+            "Sustituye completamente a los empleados",
+            "Disminuye la seguridad informática"
+        ],
+        answer: "Facilita el análisis de datos y predicción de tendencias"
+    },
+    {
+        question: "¿Cuál es una aplicación de la robótica colaborativa en la industria?",
+        options: [
+            "Sustituir a todos los trabajadores humanos",
+            "Automatizar tareas repetitivas y mejorar la eficiencia",
+            "Aumentar el tiempo de producción sin mejorar calidad",
+            "Reducir la seguridad en fábricas"
+        ],
+        answer: "Automatizar tareas repetitivas y mejorar la eficiencia"
+    },
+    {
+        question: "¿Cuál es el objetivo principal de la ciberseguridad en una empresa?",
+        options: [
+            "Evitar el uso de contraseñas seguras",
+            "Proteger sistemas y datos contra accesos no autorizados",
+            "Permitir el acceso libre a todos los datos",
+            "Eliminar la autenticación de dos factores"
+        ],
+        answer: "Proteger sistemas y datos contra accesos no autorizados"
+    },
+    {
+        question: "¿Qué permite la tecnología 5G en el ámbito de la conectividad?",
+        options: [
+            "Reducción de la velocidad de Internet",
+            "Mayor latencia en la comunicación",
+            "Velocidades ultrarrápidas y menor latencia",
+            "Uso exclusivo para redes sociales"
+        ],
+        answer: "Velocidades ultrarrápidas y menor latencia"
+    },
+    {
+        question: "¿Cómo ayuda el Internet de las Cosas (IoT) en la industria?",
+        options: [
+            "Permite la conexión y automatización de dispositivos",
+            "Reduce la conectividad de los sistemas",
+            "Aumenta la dependencia de procesos manuales",
+            "Solo se usa para redes sociales"
+        ],
+        answer: "Permite la conexión y automatización de dispositivos"
+    },
+    {
+        question: "¿Qué característica define la analítica de datos?",
+        options: [
+            "Transforma datos brutos en información significativa",
+            "Reduce la cantidad de datos disponibles",
+            "Impide el análisis de patrones",
+            "Elimina la posibilidad de tomar decisiones basadas en datos"
+        ],
+        answer: "Transforma datos brutos en información significativa"
+    },
+    {
+        question: "¿Qué ventaja tiene el uso de gemelos digitales en la industria?",
+        options: [
+            "Permiten simular procesos y optimizar el rendimiento",
+            "Incrementan la necesidad de pruebas físicas",
+            "Dificultan la predicción de fallos",
+            "Aumentan el costo de producción sin beneficios"
+        ],
+        answer: "Permiten simular procesos y optimizar el rendimiento"
+    },
+    {
+        question: "¿Cuál es el objetivo de la fabricación aditiva?",
+        options: [
+            "Reducir el uso de impresión 3D en la industria",
+            "Crear objetos físicos mediante la superposición de capas",
+            "Aumentar los residuos industriales",
+            "Limitar la personalización de productos"
+        ],
+        answer: "Crear objetos físicos mediante la superposición de capas"
+    },
+    {
+        question: "¿Cuál es una de las amenazas más comunes en ciberseguridad?",
+        options: [
+            "Ataques de phishing",
+            "Reducción de costos en infraestructura",
+            "Implementación de contraseñas seguras",
+            "Uso de redes privadas seguras"
+        ],
+        answer: "Ataques de phishing"
+    },
+    {
+        question: "¿Cómo ayuda la IA generativa en el sector creativo?",
+        options: [
+            "Creando contenido automatizado como imágenes y música",
+            "Evitando la generación de contenido nuevo",
+            "Eliminando la creatividad en los procesos",
+            "Reduciendo la cantidad de información procesable"
+        ],
+        answer: "Creando contenido automatizado como imágenes y música"
+    },
+    {
+        question: "¿Cuál es uno de los riesgos de no mantener los sistemas actualizados en ciberseguridad?",
+        options: [
+            "Mayor vulnerabilidad a ataques",
+            "Mayor protección contra ciberataques",
+            "Menor exposición a amenazas",
+            "Mejor rendimiento del sistema"
+        ],
+        answer: "Mayor vulnerabilidad a ataques"
+    },
+    {
+        question: "¿Cómo contribuye el Big Data en la toma de decisiones empresariales?",
+        options: [
+            "Permite analizar grandes volúmenes de datos para identificar patrones",
+            "Disminuye la cantidad de información disponible",
+            "Hace que los datos sean menos accesibles",
+            "Reduce la eficiencia de los procesos"
+        ],
+        answer: "Permite analizar grandes volúmenes de datos para identificar patrones"
+    },
+    {
+        question: "¿Qué impacto tiene el uso de la IA en la ciberseguridad?",
+        options: [
+            "Ayuda a detectar amenazas en tiempo real",
+            "Disminuye la capacidad de respuesta ante ataques",
+            "Hace que los sistemas sean más vulnerables",
+            "Elimina la necesidad de medidas de seguridad"
+        ],
+        answer: "Ayuda a detectar amenazas en tiempo real"
+    }
+];
+
+
+
+        // Función para mezclar el array de preguntas usando el algoritmo de Fisher-Yates
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Intercambia elementos
+            }
+        }
+
+        // Mezclar preguntas antes de empezar el test
+        shuffleArray(questions);
+
+        let currentQuestion = 0;
+        let score = 0;
+        let incorrectAnswers = [];
+
+        function loadQuestion() {
+            document.getElementById("result").innerText = "";
+            document.getElementById("question").innerText = questions[currentQuestion].question;
+            document.getElementById("options").innerHTML = "";
+
+            // Clonar el array de opciones para que no se modifiquen las originales
+            let shuffledOptions = [...questions[currentQuestion].options];
+            shuffleArray(shuffledOptions); // Mezclar respuestas antes de mostrarlas
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                document.getElementById("options").appendChild(button);
+            });
+}
+
+        function checkAnswer(selectedOption) {
+            if (selectedOption === questions[currentQuestion].answer) {
+                document.getElementById("result").innerText = "✅ ¡Correcto!";
+                score++;
+            } else {
+                document.getElementById("result").innerText = "❌ Incorrecto. La respuesta correcta es: " + questions[currentQuestion].answer;
+                incorrectAnswers.push({question: questions[currentQuestion].question, correct: questions[currentQuestion].answer});
+            }
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function showResults() {
+            document.getElementById("question").innerText = "Test finalizado";
+            document.getElementById("options").innerHTML = "";
+            document.getElementById("score").innerText = `Puntuación: ${score} de ${questions.length}`;
+            document.getElementById("score").style.display = "block";
+            if (incorrectAnswers.length > 0) {
+                document.getElementById("reviewButton").style.display = "block";
+            }
+        }
+
+        function reviewIncorrect() {
+            let reviewContent = "";
+            incorrectAnswers.forEach(item => {
+                reviewContent += `<div class='review-item'><p><strong>Pregunta:</strong> ${item.question}</p><p><strong>Respuesta correcta:</strong> ${item.correct}</p></div>`;
+            });
+            document.getElementById("reviewContent").innerHTML = reviewContent;
+            document.getElementById("review").style.display = "block";
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
