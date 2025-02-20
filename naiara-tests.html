@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de unidad 3 : Sostenibilidad y desempeño</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .options button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .review-container {
+            margin-top: 15px;
+            padding: 15px;
+            background: #ffecec;
+            border-radius: 8px;
+            display: none;
+            text-align: left;
+            border: 1px solid #ff9999;
+        }
+        .review-container h3 {
+            color: #d9534f;
+        }
+        .review-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 5px solid #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+        <div id="result" class="result"></div>
+        <div id="score" class="result" style="display:none;"></div>
+        <button id="reviewButton" style="display:none; margin-top:10px;" onclick="reviewIncorrect()">Revisar respuestas incorrectas</button>
+        <div id="review" class="review-container">
+            <h3>Respuestas incorrectas:</h3>
+            <div id="reviewContent"></div>
+        </div>
+    </div>
+
+    <script>
+const questions = [
+        {
+        question: "¿Cuántos Objetivos de Desarrollo Sostenible (ODS) existen?",
+        options: ["15", "16", "17", "18"],
+        answer: "17"
+    },
+    {
+        question: "¿Qué ODS está relacionado con el acceso al agua potable y saneamiento?",
+        options: ["ODS 4", "ODS 6", "ODS 8", "ODS 10"],
+        answer: "ODS 6"
+    },
+    {
+        question: "¿Cuál es uno de los riesgos asociados a los ODS en la actividad profesional?",
+        options: ["Mejora de la reputación", "Mayor aceptación social", "Uso excesivo de pesticidas", "Aumento de ingresos"],
+        answer: "Uso excesivo de pesticidas"
+    },
+    {
+        question: "¿Cuál de las siguientes familias profesionales tiene impacto transversal en los ODS?",
+        options: ["Informática y comunicaciones", "Agraria", "Sanidad", "Química"],
+        answer: "Informática y comunicaciones"
+    },
+    {
+        question: "¿Qué ODS se relaciona con la reducción de desigualdades?",
+        options: ["ODS 8", "ODS 10", "ODS 12", "ODS 14"],
+        answer: "ODS 10"
+    },
+    {
+        question: "¿Cuál de los siguientes perfiles pertenece a la familia profesional de fabricación mecánica?",
+        options: ["Técnico en producción agropecuaria", "Soldador/a y oxicortador/a", "Criador/a de ganado ecológico", "Diseñador/a de interiores"],
+        answer: "Soldador/a y oxicortador/a"
+    },
+    {
+        question: "¿Qué impacto ambiental puede generar el uso de fertilizantes químicos?",
+        options: ["Mayor biodiversidad", "Contaminación del suelo y agua", "Reducción del CO2 en la atmósfera", "Mayor crecimiento de los ecosistemas"],
+        answer: "Contaminación del suelo y agua"
+    },
+    {
+        question: "¿Cuál es una de las oportunidades empresariales relacionadas con los ODS?",
+        options: ["Pérdida de clientes", "Acceso a nuevos mercados", "Mayor burocracia", "Disminución de eficiencia"],
+        answer: "Acceso a nuevos mercados"
+    },
+    {
+        question: "¿Cuál es el objetivo principal del ODS 7?",
+        options: ["Garantizar energía asequible y no contaminante", "Promover la educación de calidad", "Reducir la desigualdad de género", "Fomentar la innovación tecnológica"],
+        answer: "Garantizar energía asequible y no contaminante"
+    },
+    {
+        question: "¿Qué acción contribuye al ODS 12 sobre producción y consumo responsables?",
+        options: ["Usar más plástico de un solo uso", "Fomentar la economía circular", "Incrementar el desperdicio de alimentos", "Utilizar energía fósil"],
+        answer: "Fomentar la economía circular"
+    },
+    {
+        question: "¿Qué ODS está relacionado con el trabajo decente y crecimiento económico?",
+        options: ["ODS 5", "ODS 7", "ODS 8", "ODS 10"],
+        answer: "ODS 8"
+    },
+    {
+        question: "¿Qué industria tiene impacto directo en el ODS 14 sobre vida submarina?",
+        options: ["Agraria", "Pesca y acuicultura", "Textil y confección", "Industria automotriz"],
+        answer: "Pesca y acuicultura"
+    },
+    {
+        question: "¿Qué acción contribuye al ODS 13 sobre acción por el clima?",
+        options: ["Reducir el consumo energético", "Usar más combustibles fósiles", "Aumentar el desperdicio de agua", "No reciclar"],
+        answer: "Reducir el consumo energético"
+    },
+    {
+        question: "¿Qué familia profesional tiene impacto en el ODS 3 sobre salud y bienestar?",
+        options: ["Sanidad", "Agraria", "Informática y comunicaciones", "Química"],
+        answer: "Sanidad"
+    },
+    {
+        question: "¿Qué impacto puede generar la extracción descontrolada de semillas?",
+        options: ["Aumento de la biodiversidad", "Reducción de la diversidad genética", "Mejor salud del suelo", "Mayor fertilidad en el suelo"],
+        answer: "Reducción de la diversidad genética"
+    },
+    {
+        question: "¿Qué familia profesional se relaciona con la construcción de infraestructuras sostenibles?",
+        options: ["Edificación y obra civil", "Hostelería y turismo", "Textil y confección", "Imagen y sonido"],
+        answer: "Edificación y obra civil"
+    },
+    {
+        question: "¿Qué ODS se relaciona con la producción y consumo responsables?",
+        options: ["ODS 6", "ODS 9", "ODS 12", "ODS 15"],
+        answer: "ODS 12"
+    },
+    {
+        question: "¿Cuál de estos sectores tiene impacto en la reducción de la contaminación del aire?",
+        options: ["Transporte y mantenimiento", "Industria textil", "Hostelería y turismo", "Educación"],
+        answer: "Transporte y mantenimiento"
+    },
+    {
+        question: "¿Qué ODS está relacionado con la innovación y la infraestructura?",
+        options: ["ODS 3", "ODS 9", "ODS 11", "ODS 16"],
+        answer: "ODS 9"
+    },
+    {
+        question: "¿Qué medida ayuda a la conservación de los ecosistemas terrestres?",
+        options: ["Uso sostenible de recursos naturales", "Deforestación", "Uso excesivo de fertilizantes", "Vertido de desechos en ríos"],
+        answer: "Uso sostenible de recursos naturales"
+    },
+    {
+        question: "¿Qué familia profesional puede contribuir directamente al ODS 2 Hambre Cero?",
+        options: ["Agraria", "Química", "Sanidad", "Electricidad y electrónica"],
+        answer: "Agraria"
+    },
+    {
+        question: "¿Cuál de las siguientes acciones ayuda a la conservación del agua?",
+        options: ["Usar el agua de forma eficiente", "Dejar los grifos abiertos", "No reciclar agua", "Utilizar detergentes contaminantes"],
+        answer: "Usar el agua de forma eficiente"
+    },
+    {
+        question: "¿Qué impacto tiene el uso excesivo de pesticidas?",
+        options: ["Aumento de la biodiversidad", "Contaminación del agua y suelo", "Regeneración de bosques", "Reducción de emisiones de CO2"],
+        answer: "Contaminación del agua y suelo"
+    },
+    {
+        question: "¿Cuál de las siguientes opciones es una oportunidad de negocio derivada de los ODS?",
+        options: ["Mayor costo operativo", "Acceso a nuevos mercados", "Desinterés del consumidor", "Menos eficiencia"],
+        answer: "Acceso a nuevos mercados"
+    },
+    {
+        question: "¿Qué ODS está relacionado con la vida y los ecosistemas terrestres?",
+        options: ["ODS 13", "ODS 14", "ODS 15", "ODS 17"],
+        answer: "ODS 15"
+    },
+    {
+        question: "¿Qué acción ayuda a reducir el desperdicio de alimentos?",
+        options: ["Comprar solo lo necesario", "Desperdiciar comida en buen estado", "Tirar los alimentos vencidos sin revisarlos", "No planificar compras"],
+        answer: "Comprar solo lo necesario"
+    },
+    {
+        question: "¿Qué familia profesional tiene impacto en la eficiencia energética?",
+        options: ["Electricidad y electrónica", "Hostelería y turismo", "Química", "Sanidad"],
+        answer: "Electricidad y electrónica"
+    },
+    {
+        question: "¿Qué industria tiene impacto en la reducción de residuos electrónicos?",
+        options: ["Informática y comunicaciones", "Agraria", "Hostelería y turismo", "Industria del entretenimiento"],
+        answer: "Informática y comunicaciones"
+    },
+    {
+        question: "¿Qué ODS se enfoca en garantizar ciudades y comunidades sostenibles?",
+        options: ["ODS 5", "ODS 9", "ODS 11", "ODS 14"],
+        answer: "ODS 11"
+    },
+    {
+        question: "¿Cuál es un riesgo asociado al uso de especies no autóctonas?",
+        options: ["Pérdida de biodiversidad", "Mayor crecimiento de cultivos", "Reducción de erosión del suelo", "Aumento de la fertilidad del suelo"],
+        answer: "Pérdida de biodiversidad"
+    },
+    {
+        question: "¿Qué ODS busca promover la paz, la justicia y las instituciones sólidas?",
+        options: ["ODS 13", "ODS 15", "ODS 16", "ODS 17"],
+        answer: "ODS 16"
+    },
+    {
+        question: "¿Qué beneficio tiene la economía circular?",
+        options: ["Generar más residuos", "Reducir el desperdicio de recursos", "Mayor contaminación", "Uso excesivo de energía"],
+        answer: "Reducir el desperdicio de recursos"
+    },
+    {
+        question: "¿Qué familia profesional puede contribuir a la eficiencia en el uso del agua?",
+        options: ["Energía y agua", "Hostelería y turismo", "Artes gráficas", "Sanidad"],
+        answer: "Energía y agua"
+    },
+    {
+        question: "¿Qué acción ayuda a reducir la huella de carbono en las empresas?",
+        options: ["Uso de energías renovables", "Aumento del consumo de combustibles fósiles", "Desperdicio de recursos", "No reciclar"],
+        answer: "Uso de energías renovables"
+    },
+    {
+        question: "¿Cuál de las siguientes prácticas es un ejemplo de transición energética?",
+        options: ["Uso de carbón para producir electricidad", "Inversión en energía solar y eólica", "Mayor extracción de petróleo", "Quema de residuos sin tratamiento"],
+        answer: "Inversión en energía solar y eólica"
+    },
+    {
+        question: "¿Qué ODS está relacionado con el acceso a educación de calidad?",
+        options: ["ODS 2", "ODS 4", "ODS 8", "ODS 10"],
+        answer: "ODS 4"
+    },
+    {
+        question: "¿Qué impacto puede generar la sobreexplotación pesquera?",
+        options: ["Reducción de la biodiversidad marina", "Mejor calidad del agua", "Aumento de especies marinas", "Regeneración natural de ecosistemas"],
+        answer: "Reducción de la biodiversidad marina"
+    },    {
+        question: "¿Cuál es el objetivo principal del ODS 1?",
+        options: ["Erradicar la pobreza", "Promover la educación", "Garantizar el acceso al agua", "Reducir las desigualdades"],
+        answer: "Erradicar la pobreza"
+    },
+    {
+        question: "¿Qué ODS promueve la igualdad de género?",
+        options: ["ODS 3", "ODS 5", "ODS 7", "ODS 9"],
+        answer: "ODS 5"
+    },
+    {
+        question: "¿Qué tipo de impacto tiene el sector de la edificación en la sostenibilidad?",
+        options: ["Aumento de la biodiversidad", "Consumo de recursos naturales", "Reducción de la contaminación", "Mejor calidad del aire"],
+        answer: "Consumo de recursos naturales"
+    },
+    {
+        question: "¿Cuál es una de las acciones necesarias para reducir la contaminación del agua?",
+        options: ["Usar más plásticos", "No reciclar residuos", "Evitar el uso de productos químicos contaminantes", "Desechar baterías en ríos"],
+        answer: "Evitar el uso de productos químicos contaminantes"
+    },
+    {
+        question: "¿Cuál es un riesgo asociado a la sobreexplotación de los recursos naturales?",
+        options: ["Mayor estabilidad del ecosistema", "Pérdida de biodiversidad", "Regeneración de los suelos", "Aumento de recursos disponibles"],
+        answer: "Pérdida de biodiversidad"
+    },
+    {
+        question: "¿Qué industria contribuye directamente al ODS 15 sobre ecosistemas terrestres?",
+        options: ["Industria textil", "Agricultura y ganadería", "Tecnología de la información", "Turismo"],
+        answer: "Agricultura y ganadería"
+    },
+    {
+        question: "¿Qué ODS busca garantizar la paz, justicia e instituciones sólidas?",
+        options: ["ODS 8", "ODS 10", "ODS 16", "ODS 17"],
+        answer: "ODS 16"
+    },
+    {
+        question: "¿Qué impacto tiene el mal manejo de residuos electrónicos?",
+        options: ["Mayor acceso a tecnología", "Contaminación del suelo y agua", "Reducción de emisiones de CO2", "Regeneración de bosques"],
+        answer: "Contaminación del suelo y agua"
+    },
+    {
+        question: "¿Cuál es un beneficio de la eficiencia energética en las empresas?",
+        options: ["Mayor consumo de electricidad", "Reducción de costos operativos", "Aumento del desperdicio", "Dependencia de combustibles fósiles"],
+        answer: "Reducción de costos operativos"
+    },
+    {
+        question: "¿Qué acción se puede tomar para reducir el impacto del transporte en el medio ambiente?",
+        options: ["Usar combustibles fósiles", "Promover el uso del transporte público", "Aumentar el tráfico vehicular", "Desarrollar carreteras sin planificación"],
+        answer: "Promover el uso del transporte público"
+    },
+    {
+        question: "¿Qué ODS está relacionado con el acceso a agua limpia y saneamiento?",
+        options: ["ODS 3", "ODS 6", "ODS 8", "ODS 12"],
+        answer: "ODS 6"
+    },
+    {
+        question: "¿Cuál de las siguientes estrategias ayuda a reducir la huella de carbono en la industria?",
+        options: ["Uso de energías renovables", "Aumento del uso de plástico", "Mayor consumo de combustibles fósiles", "Desperdicio de agua"],
+        answer: "Uso de energías renovables"
+    },
+    {
+        question: "¿Qué sector tiene un impacto importante en la reducción de residuos plásticos?",
+        options: ["Agricultura", "Industria alimentaria", "Energía renovable", "Transporte"],
+        answer: "Industria alimentaria"
+    },
+    {
+        question: "¿Cuál es una de las consecuencias del cambio climático?",
+        options: ["Mayor estabilidad ambiental", "Aumento de desastres naturales", "Regeneración de ecosistemas", "Menos emisiones de carbono"],
+        answer: "Aumento de desastres naturales"
+    },
+    {
+        question: "¿Qué familia profesional puede contribuir al ODS 14 sobre vida submarina?",
+        options: ["Marítimo pesquero", "Edificación y obra civil", "Transporte y mantenimiento", "Industria automotriz"],
+        answer: "Marítimo pesquero"
+    },
+    {
+        question: "¿Cuál es un objetivo clave de la economía circular?",
+        options: ["Aumentar la producción de residuos", "Extender el ciclo de vida de los productos", "Usar más recursos naturales", "Desperdiciar menos energía"],
+        answer: "Extender el ciclo de vida de los productos"
+    },
+    {
+        question: "¿Qué impacto tiene la sobrepesca en los ecosistemas marinos?",
+        options: ["Mayor disponibilidad de peces", "Desequilibrio en la cadena alimenticia", "Regeneración de especies marinas", "Mejor calidad del agua"],
+        answer: "Desequilibrio en la cadena alimenticia"
+    },
+    {
+        question: "¿Cuál es una forma de fomentar el consumo responsable?",
+        options: ["Comprar solo lo necesario", "Desperdiciar comida", "Usar productos desechables", "No reciclar materiales"],
+        answer: "Comprar solo lo necesario"
+    },
+    {
+        question: "¿Qué ODS está vinculado a la producción de energía limpia y sostenible?",
+        options: ["ODS 5", "ODS 7", "ODS 9", "ODS 11"],
+        answer: "ODS 7"
+    },
+    {
+        question: "¿Qué familia profesional tiene un impacto significativo en la reducción de emisiones industriales?",
+        options: ["Industria química", "Textil y confección", "Agraria", "Sanidad"],
+        answer: "Industria química"
+    }];
+
+
+        // Función para mezclar el array de preguntas usando el algoritmo de Fisher-Yates
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Intercambia elementos
+            }
+        }
+
+        // Mezclar preguntas antes de empezar el test
+        shuffleArray(questions);
+
+        let currentQuestion = 0;
+        let score = 0;
+        let incorrectAnswers = [];
+
+        function loadQuestion() {
+            document.getElementById("result").innerText = "";
+            document.getElementById("question").innerText = questions[currentQuestion].question;
+            document.getElementById("options").innerHTML = "";
+
+            // Clonar el array de opciones para que no se modifiquen las originales
+            let shuffledOptions = [...questions[currentQuestion].options];
+            shuffleArray(shuffledOptions); // Mezclar respuestas antes de mostrarlas
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                document.getElementById("options").appendChild(button);
+            });
+}
+
+        function checkAnswer(selectedOption) {
+            if (selectedOption === questions[currentQuestion].answer) {
+                document.getElementById("result").innerText = "✅ ¡Correcto!";
+                score++;
+            } else {
+                document.getElementById("result").innerText = "❌ Incorrecto. La respuesta correcta es: " + questions[currentQuestion].answer;
+                incorrectAnswers.push({question: questions[currentQuestion].question, correct: questions[currentQuestion].answer});
+            }
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function showResults() {
+            document.getElementById("question").innerText = "Test finalizado";
+            document.getElementById("options").innerHTML = "";
+            document.getElementById("score").innerText = `Puntuación: ${score} de ${questions.length}`;
+            document.getElementById("score").style.display = "block";
+            if (incorrectAnswers.length > 0) {
+                document.getElementById("reviewButton").style.display = "block";
+            }
+        }
+
+        function reviewIncorrect() {
+            let reviewContent = "";
+            incorrectAnswers.forEach(item => {
+                reviewContent += `<div class='review-item'><p><strong>Pregunta:</strong> ${item.question}</p><p><strong>Respuesta correcta:</strong> ${item.correct}</p></div>`;
+            });
+            document.getElementById("reviewContent").innerHTML = reviewContent;
+            document.getElementById("review").style.display = "block";
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
