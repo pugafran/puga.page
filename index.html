@@ -1,68 +1,91 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Work in Progress</title>
-    <link rel="stylesheet" type="text/css" href="estilos.css">
-  </head>
-  <body>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>root@puga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+  <link href="estilos.css" rel="stylesheet"/>
+</head>
+<body class="bg-black text-green-500 font-[VT323] min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-4xl rounded-lg border-2 border-green-500 shadow-[0_0_25px_#00FF00] overflow-hidden">
+<!-- Header terminal -->
+<header class="bg-[#121826] px-4 py-3 flex items-center justify-between border-b-2 border-green-500">
+  <div class="flex items-center space-x-2">
+    <span class="text-green-500 text-xl">root@puga:~</span>
+  </div>
+  <div class="flex space-x-2">
+    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+  </div>
+</header>
 
-    <h1 class="hacker typing">Francisco Gabriel Puga Lojo</h1>
-    <p class="hacker">Lo sentimos, esta página todavía está en construcción. Por favor, vuelve pronto. </p>
 
-    <div style="display: flex; flex-direction: column; align-items: center; height: 100vh;">
-      <!-- Contenedor para la columna izquierda y la consola juntos -->
-    <div style="display: flex; width: 100%;">
-      <div id="left-column" style="flex: 1; background-color: black; padding: 10px; display: flex; flex-direction: column;">
-        <div>
-          <p id="ip" class="hacker">Dirección IP: </p>
-          <p id="provider" class="hacker">Proveedor de Internet: </p>
-          <p id="country" class="hacker">País: </p>
-          <p id="region" class="hacker">Región: </p>
-          <p id="city" class="hacker">Ciudad: </p>
-          <p id="postal" class="hacker">Postal: </p>
-          <p id="wallet-address" class="hacker">Wallet: </p>
-        </div>
+</header>
+
+    <!-- Main content terminal -->
+    <main class="bg-black p-4 h-[500px] scrollable-content overflow-y-auto" id="console">
+<div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+  <img src="Texture157.png" class="w-24 h-24 rounded-full border-2 border-green-500 object-cover" alt="Foto perfil">
+  <div>
+    <p class="text-green-400 text-xl typing-container">
+      <span id="typewriter-text"></span><span class="blinker">_</span>
+    </p>
+    <p class="text-green-400 text-lg mt-2" id="typewriter-subtext"></p>
+  </div>
+</div>
+
+      <div id="ipinfo" class="mb-4">
+        <p id="ip">IP: <span id="ip-value">Cargando...</span></p>
+        <p id="provider">ISP: <span id="provider-value">Cargando...</span></p>
+        <p id="country">País: <span id="country-value">Cargando...</span></p>
+        <p id="region">Región: <span id="region-value">Cargando...</span></p>
+        <p id="city">Ciudad: <span id="city-value">Cargando...</span></p>
+        <p id="postal">Postal: <span id="postal-value">Cargando...</span></p>
       </div>
+      <div id="output" class="space-y-2 mb-4"></div>
+<div class="flex items-center relative w-full">
+<div class="flex items-center relative w-full">
+  <span class="text-green-500 mr-2 whitespace-nowrap">puga@page:~$</span>
+  <div class="relative flex-grow">
+    <input
+      id="input"
+      type="text"
+      class="bg-transparent border-none outline-none text-green-500 w-full relative z-10"
+      autofocus
+      autocomplete="off"
+    />
+    <span
+      id="autocomplete-suggestion"
+      class="absolute top-0 left-0 text-gray-500 pointer-events-none select-none whitespace-pre font-[inherit] text-[inherit] z-0"
+    ></span>
+  </div>
+</div>
 
 
-        <div id="console-container" class="tube-screen" style="flex: 1;">
-          <div id="console">
-            <div id="output"></div>
-            <div id="prompt" style="display: flex; align-items: center;" type="text">
-              puga@page: <input id="input" type="text" />
-              <span id="autocomplete-suggestion"></span>
-          </div>
-          
-          </div>
-        </div>
-      </div>
 
+    </main>
 
-    
+    <!-- Footer -->
+    <footer class="bg-[#121826] text-center p-3 border-t-2 border-green-500 text-sm">
+      © 2025 Francisco Gabriel Puga Lojo - Todos los derechos reservados.
+    </footer>
+  </div>
 
-      
-      <div id="projects-container"></div>
+  <div class="centrador flex justify-center my-8">
+    <div class="spiral" id="spiral"></div>
+    <div class="spiral" id="spiral2"></div>
+  </div>
 
-     
-       
-    </div>
-    
-    <div class="centrador">
-      <div id="spiral" class="spiral"></div>
-      <div id="spiral2" class="spiral"></div>
-    </div>
+  <!-- BOTONES FINALES -->
+  <div class="flex flex-wrap justify-center gap-4 mt-4">
+    <a href="https://controldiabet.es"><button class="hacker">Controldiabet.es</button></a>
+    <a href="https://github.com/pugafran"><button class="hacker">GitHub</button></a>
+  </div>
 
-    <div class="container" id="button-container" style="text-align: center; margin-top: auto;">
-      <a href="https://controldiabet.es"><button> Controldiabet.es</button></a>
-      <a href="https://github.com/pugafran/"><button> Github</button></a>
-      <button id="toggleMode" onclick="window.location='index_normal.html';">Modo Normal</button>
-    </div>
-
-  
-  
-
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
-    <script src="scripts.js"></script>
-    
-  </body>
+  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
 </html>

@@ -1,18 +1,3 @@
-
-
-
-body {
-    background-color: #000000;
-}
-
-.hacker {
-    background-color: black;
-    color: lime;
-    font-family: 'Courier New', Courier, monospace;
-    padding: 5px;
-    border: 1px solid lime;
-  }
-  
 button{
     padding: 20px;
     background-color: #000000;
@@ -40,99 +25,10 @@ button:hover{
                 0 0 200px lime;      
 }
 
-a{
-    text-decoration: none;
-}
-
 .container {
     display: flex; /* Hacer que los elementos hijos (botones) se dispongan en línea */
     justify-content: center; /* Centrar los elementos hijos (botones) horizontalmente */
 }
-
-.typing {
-    white-space: pre;  /* Asegura que los espacios y los saltos de línea se respeten. */
-    border-right: 2px solid;
-    overflow: hidden;  /* Asegura que el contenido no se desborde. */
-    margin: 0 auto;
-    letter-spacing: 1px; /* Espaciado entre letras. */
-    animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
-  }
-  
-  /* Animación para simular el tipeo. */
-  @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-  }
-  
-  /* Animación para simular el parpadeo del cursor. */
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: black; }
-  }
-
-  #console {
-    background-color: black;
-    color: lime;
-    width: 500px;
-    height: 300px;
-    overflow: hidden;
-    padding: 10px;
-  }
-  
-  #input {
-    color: lime;
-    background-color: black;
-    outline: none;
-    border: none;
-    margin-right: 1px; /* Asegúrate de que este margen no sea demasiado grande */
-    width: auto; /* O un ancho específico que funcione para tu diseño */
-    display: inline;
-  }
-
-  #prompt {
-    display: flex;
-    align-items: center;
-    white-space: nowrap; /* Evita que los elementos se envuelvan en líneas múltiples */
-}
-
-#autocomplete-suggestion {
-    color: #555;
-    margin-left: 0; /* Elimina cualquier margen extra */
-
-}
-
-  
-  #output {
-    margin-bottom: 10px;
-  }
-  
-
-.tube-screen {
-    border: 10px solid #333; /* Grosor y color del marco de la pantalla */
-    border-radius: 25px; /* Bordas redondeadas */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra alrededor de la pantalla */
-    background-color: black; /* Color de fondo de la pantalla */
-    color: lime; /* Color del texto */
-    padding: 20px; /* Espacio interior alrededor del contenido */
-    width: 500px; /* Ancho de la pantalla */
-    height: 300px; /* Altura de la pantalla */
-    overflow: hidden; 
-    display: block;
-  }
-  
-  #connect-button {
-    padding: 10px 20px;
-    font-size: 20px;
-} 
-
-#projects-container {
-  width: calc(100% - 20px); /* Ajusta el ancho al 100% menos el padding total horizontal */
-  max-width: 1024px; /* O el ancho máximo que prefieras */
-  margin: 20px auto; /* Espacio superior e inferior, y auto para centrar horizontalmente */
-  padding: 10px;
-  box-sizing: border-box;
-}
-
 
 .spiral{
   display: flex;
@@ -178,19 +74,17 @@ img:hover {
 }
 */
 
-@media screen and (max-width: 768px) {
-  /* Estilos para pantallas pequeñas (como teléfonos móviles) */
-  .container {
-      flex-direction: column; /* Apila los botones verticalmente */
-  }
+.typing-container {
+  font-family: 'VT323', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
-  #console, .tube-screen {
-      width: 100%; /* Ajusta el ancho al tamaño de la pantalla */
-      height: auto; /* Altura automática para evitar cortes */
-  }
+.blinker {
+  animation: blink 1s step-end infinite;
+}
 
-  .button {
-      padding: 10px; /* Menor tamaño de botón para pantallas pequeñas */
-      font-size: 14px; /* Tamaño de letra más pequeño */
-  }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
