@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>root@projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+  <link href="estilos.css" rel="stylesheet"/>
+  <style>
+    .project-logo {
+      filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(75deg);
+    }
+  </style>
+</head>
+<body class="bg-black text-green-500 font-[VT323] min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-4xl rounded-lg border-2 border-green-500 shadow-[0_0_25px_#00FF00] overflow-hidden">
+    <header class="bg-[#121826] px-4 py-3 flex items-center justify-between border-b-2 border-green-500">
+      <div class="flex items-center space-x-2">
+        <span class="text-green-500 text-xl">root@projects:~</span>
+      </div>
+      <div class="flex space-x-2">
+        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+      </div>
+    </header>
+    <main class="bg-black p-4 space-y-6">
+      <h1 class="text-2xl mb-4">Proyectos</h1>
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-xl">Mecalux - Sistemas de IA</h2>
+          <p class="ml-4">Participación en proyectos de inteligencia artificial durante un año.</p>
+          <div class="flex gap-4 mt-2 ml-4">
+            <img src="python.png" class="w-8 h-8 project-logo" alt="Python">
+            <img src="flask.png" class="w-8 h-8 project-logo" alt="Flask">
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xl">Gestor de nodos LUKSO</h2>
+          <p class="ml-4">Automatización para la gestión de nodos en la blockchain LUKSO.</p>
+          <div class="flex gap-4 mt-2 ml-4">
+            <img src="web3js.png" class="w-8 h-8 project-logo" alt="Web3.js">
+            <img src="solidity.svg" class="w-8 h-8 project-logo" alt="Solidity">
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xl">Lectura de códigos de barras</h2>
+          <p class="ml-4">Uso de QuaggaJS para detección en tiempo real.</p>
+          <div class="flex gap-4 mt-2 ml-4">
+            <img src="quagga.png" class="w-8 h-8 project-logo" alt="QuaggaJS">
+          </div>
+        </div>
+      </div>
+      <a href="index.html" class="text-green-400 underline block mt-6">Volver</a>
+    </main>
+  </div>
+</body>
+</html>
