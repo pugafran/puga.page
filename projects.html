@@ -11,6 +11,14 @@
     .project-logo {
       filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(75deg);
     }
+    /* simple vertical timeline */
+    .timeline-line {
+      position: absolute;
+      left: 0.75rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+    }
   </style>
 </head>
 <body class="bg-black text-green-500 font-[VT323] min-h-screen flex flex-col items-center justify-center p-4">
@@ -52,6 +60,45 @@
           </div>
         </div>
       </div>
+
+      <section class="mt-10">
+        <h2 class="text-2xl mb-4">Experiencia</h2>
+        <ol class="relative ml-6 border-l border-green-500">
+          <span class="timeline-line bg-green-500"></span>
+
+          <li class="mb-10 ml-6">
+            <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
+            <time class="text-sm">ago. 2024 - Actualidad · 11 meses</time>
+            <h3 class="text-xl font-semibold flex items-center">
+              <img src="mecalux.svg" class="w-6 h-6 project-logo mr-2" alt="Mecalux logo" />
+              AI Engineer
+            </h3>
+            <p class="text-green-400">Mecalux · Jornada completa</p>
+            <p class="text-green-400">Tremañes, Principado de Asturias, España · Presencial</p>
+            <p class="text-green-400">C#, ASP.NET y 9 aptitudes más</p>
+          </li>
+
+          <li class="mb-10 ml-6">
+            <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
+            <time class="text-sm">feb. 2024 - abr. 2024 · 3 meses</time>
+            <h3 class="text-xl font-semibold flex items-center">
+              <img src="mecalux.svg" class="w-6 h-6 project-logo mr-2" alt="Mecalux logo" />
+              AI Engineer (Prácticas)
+            </h3>
+            <p class="text-green-400">Mecalux · Contrato de prácticas</p>
+            <p class="text-green-400">Tremañes, Principado de Asturias, España · Presencial</p>
+            <p class="text-green-400">C#, LLM y 2 aptitudes más</p>
+          </li>
+
+          <li class="mb-10 ml-6">
+            <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
+            <time class="text-sm">2023 - Presente</time>
+            <h3 class="text-xl font-semibold">Desarrollador Freelance</h3>
+            <p class="text-green-400">Proyectos blockchain y consultoría.</p>
+          </li>
+        </ol>
+      </section>
+
       <a href="index.html" class="text-green-400 underline block mt-6">Volver</a>
     </main>
   </div>
