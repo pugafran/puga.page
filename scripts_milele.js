@@ -53,9 +53,10 @@ async function autoLogin() {
             localStorage.setItem('access_token', data.access_token);
 
             // Redirigir a la vista principal tras autenticación exitosa
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('map').style.display = 'block';
-            document.getElementById('toggleFormButton').style.display = 'block';
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('map').style.display = 'block';
+        document.getElementById('toggleFormButton').style.display = 'block';
+        document.getElementById('logoutButton').style.display = 'block';
 
             await loadPois();
         } catch (error) {
@@ -256,6 +257,7 @@ window.addEventListener('load', autoLogin);
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('map').style.display = 'block';
             document.getElementById('toggleFormButton').style.display = 'block';
+            document.getElementById('logoutButton').style.display = 'block';
 
             await loadPois();
         } catch (error) {
@@ -272,6 +274,10 @@ window.addEventListener('load', autoLogin);
     document.getElementById('closeFormButton').addEventListener('click', () => {
         document.getElementById('formContainer').style.display = 'none';
     });
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        localStorage.removeItem('access_token');
+        location.reload();
+    });
 
     document.getElementById('type').addEventListener('change', function() {
         const iconContainer = document.getElementById('iconContainer');
@@ -284,8 +290,10 @@ window.addEventListener('load', autoLogin);
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('map').style.display = 'block';
             document.getElementById('toggleFormButton').style.display = 'block';
+            document.getElementById('logoutButton').style.display = 'block';
             loadPois();
         } else {
             document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('logoutButton').style.display = 'none';
         }
     });
