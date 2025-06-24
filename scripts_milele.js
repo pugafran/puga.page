@@ -96,6 +96,7 @@ window.addEventListener('load', autoLogin);
                 ${data.photo ? `<img src="${data.photo}" style="max-width:100%;height:auto;"/>` : ''}
                 <p><strong>Fecha:</strong> ${data.date}</p>
                 <p><strong>Tipo:</strong> ${data.type.replace(/\b\w/g, l => l.toUpperCase())}</p>
+                ${data.username ? `<p><strong>Usuario:</strong> ${data.username}</p>` : ''}
                 ${data.rating ? `<p><strong>Calificación:</strong> ${'★'.repeat(data.rating)}</p>` : ''}
                 <button onclick="deletePOI('${key}')" class="delete-btn">🗑️ Eliminar</button>
             </div>
