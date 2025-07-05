@@ -16,11 +16,33 @@
     /* simple vertical timeline */
     .timeline-line {
       position: absolute;
-      left: 0.75rem;
+      left: 1.5rem;
       top: 0;
       bottom: 0;
       width: 2px;
     }
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip-container:hover::after {
+      content: attr(data-alt);
+      position: absolute;
+      bottom: -1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'VT323', monospace;
+      font-size: 0.875rem;
+      padding: 2px 6px;
+      border: 1px solid #00ff00;
+      white-space: nowrap;
+      z-index: 10;
+      box-shadow: 0 0 10px #00ff00;
+      pointer-events: none;
+    }
+    
   </style>
 </head>
 <body class="bg-black text-green-500 font-[VT323] min-h-screen flex flex-col items-center justify-center p-4">
@@ -42,44 +64,44 @@
           <h2 class="text-xl">Mecalux - Sistemas de IA</h2>
           <p class="ml-4">Participación en proyectos de inteligencia artificial durante un año.</p>
           <div class="flex flex-wrap gap-2 mt-2 ml-4">
-            <img src="logos/azure.png" class="w-8 h-8 project-logo" alt="Azure" />
-            <img src="logos/csharp.png" class="w-8 h-8 project-logo" alt="C Sharp" />
-            <img src="logos/dotnet.png" class="w-8 h-8 project-logo" alt=".NET" />
-            <img src="logos/harbor.png" class="w-8 h-8 project-logo" alt="Harbor" />
-            <img src="logos/javascript.png" class="w-8 h-8 project-logo" alt="JavaScript" />
-            <img src="logos/kubernetes.png" class="w-8 h-8 project-logo" alt="Kubernetes" />
-            <img src="logos/ollama.png" class="w-8 h-8 project-logo" alt="Ollama" />
-            <img src="logos/prometheus.png" class="w-8 h-8 project-logo" alt="Prometheus" />
-            <img src="logos/python.png" class="w-8 h-8 project-logo" alt="Python" />
-            <img src="logos/semantic_kernel.png" class="w-8 h-8 project-logo" alt="Semantic Kernel" />
-            <img src="logos/vllm.png" class="w-8 h-8 project-logo" alt="vLLM" />
+            <div class="tooltip-container" data-alt="Azure"><img src="logos/azure.png" class="w-8 h-8 project-logo" alt="Azure" /></div>
+            <div class="tooltip-container" data-alt="C Sharp"><img src="logos/csharp.png" class="w-8 h-8 project-logo" alt="C Sharp" /></div>
+            <div class="tooltip-container" data-alt=".NET"><img src="logos/dotnet.png" class="w-8 h-8 project-logo" alt=".NET" /></div>
+            <div class="tooltip-container" data-alt="Harbor"><img src="logos/harbor.png" class="w-8 h-8 project-logo" alt="Harbor" /></div>
+            <div class="tooltip-container" data-alt="JavaScript"><img src="logos/javascript.png" class="w-8 h-8 project-logo" alt="JavaScript" /></div>
+            <div class="tooltip-container" data-alt="Kubernetes"><img src="logos/kubernetes.png" class="w-8 h-8 project-logo" alt="Kubernetes" /></div>
+            <div class="tooltip-container" data-alt="Ollama"><img src="logos/ollama.png" class="w-8 h-8 project-logo" alt="Ollama" /></div>
+            <div class="tooltip-container" data-alt="Prometheus"><img src="logos/prometheus.png" class="w-8 h-8 project-logo" alt="Prometheus" /></div>
+            <div class="tooltip-container" data-alt="Python"><img src="logos/python.png" class="w-8 h-8 project-logo" alt="Python" /></div>
+            <div class="tooltip-container" data-alt="Semantic Kernel"><img src="logos/semantic_kernel.png" class="w-8 h-8 project-logo" alt="Semantic Kernel" /></div>
+            <div class="tooltip-container" data-alt="vLLM"><img src="logos/vllm.png" class="w-8 h-8 project-logo" alt="vLLM" /></div>
           </div>
         </div>
         <div>
           <h2 class="text-xl">Gestor de nodos LUKSO</h2>
           <p class="ml-4">Automatización para la gestión de nodos en la blockchain LUKSO.</p>
           <div class="flex gap-4 mt-2 ml-4">
-            <img src="web3js.png" class="w-8 h-8 project-logo" alt="Web3.js">
-            <img src="solidity.svg" class="w-8 h-8 project-logo" alt="Solidity">
+            <div class="tooltip-container" data-alt="Web3.js"><img src="web3js.png" class="w-8 h-8 project-logo" alt="Web3.js"></div>
+            <div class="tooltip-container" data-alt="Solidity"><img src="solidity.svg" class="w-8 h-8 project-logo" alt="Solidity"></div>
           </div>
         </div>
         <div>
           <h2 class="text-xl">Lectura de códigos de barras</h2>
           <p class="ml-4">Uso de QuaggaJS para detección en tiempo real.</p>
           <div class="flex gap-4 mt-2 ml-4">
-            <img src="quagga.png" class="w-8 h-8 project-logo" alt="QuaggaJS">
+            <div class="tooltip-container" data-alt="QuaggaJS"><img src="quagga.png" class="w-8 h-8 project-logo" alt="QuaggaJS"></div>
           </div>
         </div>
       </div>
 
       <section class="mt-10">
         <h2 class="text-2xl mb-4">Experiencia</h2>
-        <ol class="relative ml-6 border-l border-green-500">
+        <ol class="relative ml-6 border-green-500">
           <span class="timeline-line bg-green-500"></span>
 
-          <li class="mb-10 ml-6">
+          <li class="relative mb-10 ml-6 pl-8 ">
             <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
-            <time class="text-sm">ago. 2024 - Actualidad · 11 meses</time>
+            <time class="text-sm"></time>
             <h3 class="text-xl font-semibold flex items-center">
               <img src="mecalux.svg" class="w-8 h-8 project-logo mr-2" alt="Mecalux logo" />
               AI Engineer
@@ -87,22 +109,21 @@
             <p class="text-green-400">Mecalux · Jornada completa</p>
             <p class="text-green-400">Tremañes, Principado de Asturias, España · Presencial</p>
             <p class="text-green-400">C#, ASP.NET y 9 aptitudes más</p>
-            <div class="flex flex-wrap gap-2 mt-2 ml-4">
-              <img src="logos/azure.png" class="w-8 h-8 project-logo" alt="Azure" />
-              <img src="logos/csharp.png" class="w-8 h-8 project-logo" alt="C Sharp" />
-              <img src="logos/dotnet.png" class="w-8 h-8 project-logo" alt=".NET" />
-              <img src="logos/harbor.png" class="w-8 h-8 project-logo" alt="Harbor" />
-              <img src="logos/javascript.png" class="w-8 h-8 project-logo" alt="JavaScript" />
-              <img src="logos/kubernetes.png" class="w-8 h-8 project-logo" alt="Kubernetes" />
-              <img src="logos/ollama.png" class="w-8 h-8 project-logo" alt="Ollama" />
-              <img src="logos/prometheus.png" class="w-8 h-8 project-logo" alt="Prometheus" />
-              <img src="logos/python.png" class="w-8 h-8 project-logo" alt="Python" />
-              <img src="logos/semantic_kernel.png" class="w-8 h-8 project-logo" alt="Semantic Kernel" />
-              <img src="logos/vllm.png" class="w-8 h-8 project-logo" alt="vLLM" />
+              <div class="flex flex-wrap gap-2 mt-2 ml-4">
+              <div class="tooltip-container" data-alt="C Sharp"><img src="logos/csharp.png" class="w-8 h-8 project-logo" alt="C Sharp" /></div>
+              <div class="tooltip-container" data-alt=".NET"><img src="logos/dotnet.png" class="w-8 h-8 project-logo" alt=".NET" /></div>
+              <div class="tooltip-container" data-alt="Harbor"><img src="logos/harbor.png" class="w-8 h-8 project-logo" alt="Harbor" /></div>
+              <div class="tooltip-container" data-alt="JavaScript"><img src="logos/javascript.png" class="w-8 h-8 project-logo" alt="JavaScript" /></div>
+              <div class="tooltip-container" data-alt="Kubernetes"><img src="logos/kubernetes.png" class="w-8 h-8 project-logo" alt="Kubernetes" /></div>
+              <div class="tooltip-container" data-alt="Ollama"><img src="logos/ollama.png" class="w-8 h-8 project-logo" alt="Ollama" /></div>
+              <div class="tooltip-container" data-alt="Prometheus"><img src="logos/prometheus.png" class="w-8 h-8 project-logo" alt="Prometheus" /></div>
+              <div class="tooltip-container" data-alt="Python"><img src="logos/python.png" class="w-8 h-8 project-logo" alt="Python" /></div>
+              <div class="tooltip-container" data-alt="Semantic Kernel"><img src="logos/semantic_kernel.png" class="w-8 h-8 project-logo" alt="Semantic Kernel" /></div>
+              <div class="tooltip-container" data-alt="vLLM"><img src="logos/vllm.png" class="w-8 h-8 project-logo" alt="vLLM" /></div>
             </div>
           </li>
 
-          <li class="mb-10 ml-6">
+          <li class="relative mb-10 ml-6 pl-8">
             <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
             <time class="text-sm">feb. 2024 - abr. 2024 · 3 meses</time>
             <h3 class="text-xl font-semibold flex items-center">
@@ -113,21 +134,14 @@
             <p class="text-green-400">Tremañes, Principado de Asturias, España · Presencial</p>
             <p class="text-green-400">C#, LLM y 2 aptitudes más</p>
             <div class="flex flex-wrap gap-2 mt-2 ml-4">
-              <img src="logos/azure.png" class="w-8 h-8 project-logo" alt="Azure" />
-              <img src="logos/csharp.png" class="w-8 h-8 project-logo" alt="C Sharp" />
-              <img src="logos/dotnet.png" class="w-8 h-8 project-logo" alt=".NET" />
-              <img src="logos/harbor.png" class="w-8 h-8 project-logo" alt="Harbor" />
-              <img src="logos/javascript.png" class="w-8 h-8 project-logo" alt="JavaScript" />
-              <img src="logos/kubernetes.png" class="w-8 h-8 project-logo" alt="Kubernetes" />
-              <img src="logos/ollama.png" class="w-8 h-8 project-logo" alt="Ollama" />
-              <img src="logos/prometheus.png" class="w-8 h-8 project-logo" alt="Prometheus" />
-              <img src="logos/python.png" class="w-8 h-8 project-logo" alt="Python" />
-              <img src="logos/semantic_kernel.png" class="w-8 h-8 project-logo" alt="Semantic Kernel" />
-              <img src="logos/vllm.png" class="w-8 h-8 project-logo" alt="vLLM" />
+              <div class="tooltip-container" data-alt="C Sharp"><img src="logos/csharp.png" class="w-8 h-8 project-logo" alt="C Sharp" /></div>
+              <div class="tooltip-container" data-alt="LlamaSharp"><img src="logos/llamasharp.png" class="w-8 h-8 project-logo" alt="LlamaSharp" /></div>
+              <div class="tooltip-container" data-alt="Ollama"><img src="logos/ollama.png" class="w-8 h-8 project-logo" alt="Ollama" /></div>
+              <div class="tooltip-container" data-alt="Python"><img src="logos/python.png" class="w-8 h-8 project-logo" alt="Python" /></div>
             </div>
           </li>
 
-          <li class="mb-10 ml-6">
+          <li class="relative mb-10 ml-6 pl-8">
             <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
             <time class="text-sm">2023 - Presente</time>
             <h3 class="text-xl font-semibold">Desarrollador Freelance</h3>
@@ -139,5 +153,20 @@
       <a href="index.html" class="text-green-400 underline block mt-6">Volver</a>
     </main>
   </div>
+
+<script>
+  // Calcula meses desde agosto de 2024 hasta ahora
+  const start = new Date("2024-08-01");
+  const now = new Date();
+  const diffMonths = (now.getFullYear() - start.getFullYear()) * 12 + now.getMonth() - start.getMonth();
+  const timeElement = document.createElement("time");
+  timeElement.className = "text-sm";
+  timeElement.textContent = `ago. 2024 - Actualidad · ${diffMonths} mes${diffMonths !== 1 ? 'es' : ''}`;
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector("ol.relative > li");
+    if (container) container.insertBefore(timeElement, container.children[1]);
+  });
+</script>
+
 </body>
 </html>
