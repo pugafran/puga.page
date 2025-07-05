@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>root@projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+  <link href="estilos.css" rel="stylesheet"/>
+  <style>
+    .project-logo {
+      filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(75deg);
+    }
+    /* simple vertical timeline */
+    .timeline-line {
+      position: absolute;
+      left: 0.75rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+    }
+  </style>
+</head>
+<body class="bg-black text-green-500 font-[VT323] min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-4xl rounded-lg border-2 border-green-500 shadow-[0_0_25px_#00FF00] overflow-hidden">
+    <header class="bg-[#121826] px-4 py-3 flex items-center justify-between border-b-2 border-green-500">
+      <div class="flex items-center space-x-2">
+        <span class="text-green-500 text-xl">root@projects:~</span>
+      </div>
+      <div class="flex space-x-2">
+        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+      </div>
+    </header>
+    <main class="bg-black p-4 space-y-6">
+      <h1 class="text-2xl mb-4">Proyectos</h1>
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-xl">Mecalux - Sistemas de IA</h2>
+          <p class="ml-4">Participación en proyectos de inteligencia artificial durante un año.</p>
+          <div class="flex gap-4 mt-2 ml-4">
+            <img src="python.png" class="w-8 h-8 project-logo" alt="Python">
+            <img src="flask.png" class="w-8 h-8 project-logo" alt="Flask">
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xl">Gestor de nodos LUKSO</h2>
+          <p class="ml-4">Automatización para la gestión de nodos en la blockchain LUKSO.</p>
+          <div class="flex gap-4 mt-2 ml-4">
+            <img src="web3js.png" class="w-8 h-8 project-logo" alt="Web3.js">
+            <img src="solidity.svg" class="w-8 h-8 project-logo" alt="Solidity">
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xl">Lectura de códigos de barras</h2>
+          <p class="ml-4">Uso de QuaggaJS para detección en tiempo real.</p>
+          <div class="flex gap-4 mt-2 ml-4">
+            <img src="quagga.png" class="w-8 h-8 project-logo" alt="QuaggaJS">
+          </div>
+        </div>
+      </div>
+
+      <section class="mt-10">
+        <h2 class="text-2xl mb-4">Experiencia</h2>
+        <ol class="relative ml-6 border-l border-green-500">
+          <span class="timeline-line bg-green-500"></span>
+
+          <li class="mb-10 ml-6">
+            <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
+            <time class="text-sm">ago. 2024 - Actualidad · 11 meses</time>
+            <h3 class="text-xl font-semibold flex items-center">
+              <img src="mecalux.svg" class="w-6 h-6 project-logo mr-2" alt="Mecalux logo" />
+              AI Engineer
+            </h3>
+            <p class="text-green-400">Mecalux · Jornada completa</p>
+            <p class="text-green-400">Tremañes, Principado de Asturias, España · Presencial</p>
+            <p class="text-green-400">C#, ASP.NET y 9 aptitudes más</p>
+          </li>
+
+          <li class="mb-10 ml-6">
+            <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
+            <time class="text-sm">feb. 2024 - abr. 2024 · 3 meses</time>
+            <h3 class="text-xl font-semibold flex items-center">
+              <img src="mecalux.svg" class="w-6 h-6 project-logo mr-2" alt="Mecalux logo" />
+              AI Engineer (Prácticas)
+            </h3>
+            <p class="text-green-400">Mecalux · Contrato de prácticas</p>
+            <p class="text-green-400">Tremañes, Principado de Asturias, España · Presencial</p>
+            <p class="text-green-400">C#, LLM y 2 aptitudes más</p>
+          </li>
+
+          <li class="mb-10 ml-6">
+            <span class="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-500 rounded-full ring-8 ring-black"></span>
+            <time class="text-sm">2023 - Presente</time>
+            <h3 class="text-xl font-semibold">Desarrollador Freelance</h3>
+            <p class="text-green-400">Proyectos blockchain y consultoría.</p>
+          </li>
+        </ol>
+      </section>
+
+      <a href="index.html" class="text-green-400 underline block mt-6">Volver</a>
+    </main>
+  </div>
+</body>
+</html>

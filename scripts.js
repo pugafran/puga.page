@@ -21,7 +21,10 @@ const autocompleteSuggestion = document.getElementById("autocomplete-suggestion"
 const commands = {
   help: () => "Comandos disponibles:\nhelp, whoami, projects, clear, web3, date",
   whoami: () => "User: Francisco Gabriel Puga Lojo\nRole: Faltan cosas todavía",
-  projects: () => "- controldiabet.es\n- gestor de nodos de lukso\n- prácticas solidity",
+  projects: () => {
+    window.location.href = "projects.html";
+    return "Cargando proyectos...";
+  },
   clear: () => {
     consoleOutput.innerHTML = "";
     return "";

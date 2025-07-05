@@ -47,6 +47,7 @@
 
     <!-- Interfaz principal -->
     <button id="toggleFormButton" style="display: none;">➕ Nuevo Recuerdo</button>
+    <button id="logoutButton" style="display: none;">Cerrar sesión</button>
     
     <div id="formContainer" style="display: none;">
         <div id="iconContainer" data-type="other"></div>
@@ -59,6 +60,8 @@
                 <input type="text" id="latitude" placeholder="Latitud" readonly>
                 <input type="text" id="longitude" placeholder="Longitud" readonly>
             </div>
+
+            <input type="file" id="photo" accept="image/*">
 
             <input type="date" id="date" required>
             

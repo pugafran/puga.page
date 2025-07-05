@@ -2,13 +2,23 @@
 
     let map;
     const pois = {};
-    const markers = {};
-    const markerColors = {
+const markers = {};
+const markerColors = {
         restaurant: '#007bff',
         landmark: '#28a745',
         activity: '#fd7e14',
         other: '#dc3545'
-    };
+};
+
+    // Convertir archivo a DataURL (base64)
+    function fileToDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
 
     // Inicializar mapa
     function initMap() {
@@ -53,9 +63,10 @@ async function autoLogin() {
             localStorage.setItem('access_token', data.access_token);
 
             // Redirigir a la vista principal tras autenticación exitosa
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('map').style.display = 'block';
-            document.getElementById('toggleFormButton').style.display = 'block';
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('map').style.display = 'block';
+        document.getElementById('toggleFormButton').style.display = 'block';
+        document.getElementById('logoutButton').style.display = 'block';
 
             await loadPois();
         } catch (error) {
@@ -82,8 +93,10 @@ window.addEventListener('load', autoLogin);
                 <h3>${data.placeName}</h3>
                 ${data.title ? `<p><strong>Título:</strong> ${data.title}</p>` : ''}
                 ${data.description ? `<p>${data.description}</p>` : ''}
+                ${data.photo ? `<img src="${data.photo}" style="max-width:100%;height:auto;"/>` : ''}
                 <p><strong>Fecha:</strong> ${data.date}</p>
                 <p><strong>Tipo:</strong> ${data.type.replace(/\b\w/g, l => l.toUpperCase())}</p>
+                ${data.username ? `<p><strong>Usuario:</strong> ${data.username}</p>` : ''}
                 ${data.rating ? `<p><strong>Calificación:</strong> ${'★'.repeat(data.rating)}</p>` : ''}
                 <button onclick="deletePOI('${key}')" class="delete-btn">🗑️ Eliminar</button>
             </div>
@@ -191,11 +204,19 @@ window.addEventListener('load', autoLogin);
                     position: location,
                     map: map,
                     title: poisData[key][0].placeName,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: markerColors[poisData[key][0].type],
+                        fillOpacity: 1,
+                        strokeColor: '#fff',
+                        strokeWeight: 2,
+                        scale: 10
+                    }
                 });
 
                 // Crear InfoWindow
                 const infoWindow = new google.maps.InfoWindow({
-                    content: createInfoContent(poisData[key][0])
+                    content: createInfoContent(poisData[key][0], key)
                 });
 
                 marker.addListener('click', () => {
@@ -223,9 +244,19 @@ window.addEventListener('load', autoLogin);
         const type = document.getElementById('type').value;
         const rating = type === 'restaurant' ? parseInt(document.getElementById('rating').value) : null;
 
+        const photoFile = document.getElementById('photo').files[0];
+        let photo = null;
+        if (photoFile) {
+            try {
+                photo = await fileToDataURL(photoFile);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         await addPointOfInterest(
             { lat: latitude, lng: longitude },
-            { placeName, title, description, date, type, rating }
+            { placeName, title, description, date, type, rating, photo }
         );
 
         document.getElementById('formContainer').style.display = 'none';
@@ -256,6 +287,7 @@ window.addEventListener('load', autoLogin);
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('map').style.display = 'block';
             document.getElementById('toggleFormButton').style.display = 'block';
+            document.getElementById('logoutButton').style.display = 'block';
 
             await loadPois();
         } catch (error) {
@@ -272,6 +304,10 @@ window.addEventListener('load', autoLogin);
     document.getElementById('closeFormButton').addEventListener('click', () => {
         document.getElementById('formContainer').style.display = 'none';
     });
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        localStorage.removeItem('access_token');
+        location.reload();
+    });
 
     document.getElementById('type').addEventListener('change', function() {
         const iconContainer = document.getElementById('iconContainer');
@@ -284,8 +320,10 @@ window.addEventListener('load', autoLogin);
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('map').style.display = 'block';
             document.getElementById('toggleFormButton').style.display = 'block';
+            document.getElementById('logoutButton').style.display = 'block';
             loadPois();
         } else {
             document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('logoutButton').style.display = 'none';
         }
     });
