@@ -74,6 +74,64 @@
     </footer>
   </div>
 
+  <!-- Zona Web3 -->
+  <section id="web3-panel" class="w-full max-w-4xl mt-8 rounded-lg border-2 border-green-500 shadow-[0_0_25px_#00FF00] bg-black/80 backdrop-blur">
+    <div class="px-6 py-5 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <h2 class="text-3xl text-green-400">Terminal Web3</h2>
+          <p class="text-green-500/80 text-lg">Conecta MetaMask para consultar estadísticas on-chain y reclamar un NFT de regalo.</p>
+        </div>
+        <span id="connection-pill" class="px-4 py-1 rounded-full border border-green-500 text-green-400 text-lg text-center">Desconectado</span>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <button id="connect-metamask" class="hacker px-5 py-2">Conectar MetaMask</button>
+        <button id="refresh-metamask" class="hacker px-5 py-2 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Actualizar estado</button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 text-lg" id="wallet-stats">
+        <div class="border border-green-800/60 rounded-lg p-4">
+          <p class="text-green-500/70">Dirección conectada</p>
+          <p id="wallet-address" class="font-mono break-all text-green-300">-</p>
+        </div>
+        <div class="border border-green-800/60 rounded-lg p-4">
+          <p class="text-green-500/70">Red</p>
+          <p id="network-name" class="text-green-300">-</p>
+          <p id="chain-id" class="text-green-500/70 text-sm mt-1">Chain ID: -</p>
+        </div>
+        <div class="border border-green-800/60 rounded-lg p-4">
+          <p class="text-green-500/70">Balance</p>
+          <p id="wallet-balance" class="text-green-300">-</p>
+        </div>
+        <div class="border border-green-800/60 rounded-lg p-4">
+          <p class="text-green-500/70">Último bloque</p>
+          <p id="block-number" class="text-green-300">-</p>
+        </div>
+      </div>
+
+      <div class="border-t border-green-900/50 pt-6">
+        <h3 class="text-2xl text-green-400">Regalo NFT "Hacker Badge"</h3>
+        <p class="text-green-500/80 text-lg">Firma un mensaje para acuñar un recuerdo digital único de esta página. No tiene coste de gas: solo demuestra que tu cartera estuvo aquí.</p>
+        <button id="mint-nft" class="hacker mt-4 px-5 py-2 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Mintear NFT de regalo</button>
+
+        <div id="mint-card" class="hidden mt-6 border border-green-700 rounded-lg p-5 bg-black/60">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <p class="text-green-400 text-xl">🎉 NFT reclamado</p>
+              <p class="text-green-500/80">Token ID: <span id="mint-token-id" class="text-green-300 font-mono"></span></p>
+              <p class="text-green-500/80">Fecha: <span id="mint-timestamp" class="text-green-300"></span></p>
+            </div>
+            <div class="bg-black/40 border border-green-800 rounded-lg p-4 max-w-xl overflow-x-auto">
+              <p class="text-green-500/60 text-sm uppercase tracking-wide">Firma MetaMask</p>
+              <p id="mint-signature" class="text-green-300 font-mono break-all text-sm"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="centrador flex justify-center my-8">
     <div class="spiral" id="spiral"></div>
     <div class="spiral" id="spiral2"></div>
