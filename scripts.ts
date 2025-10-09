@@ -261,28 +261,46 @@ meta();
 
 // conecta con metamask
 async function connectMeta() {
+  const provider = (window as any)?.ethereum;
+  const consoleContainer = document.getElementById("output");
+  const walletValue = document.getElementById("wallet-value");
+  const walletAddressContainer = document.getElementById("wallet-address");
+
+  const showMessage = (message: string) => {
+    if (!consoleContainer) return;
+    const p = document.createElement("p");
+    p.textContent = message;
+    consoleContainer.appendChild(p);
+  };
+
+  if (!provider) {
+    showMessage("MetaMask no está disponible.");
+    return;
+  }
+
   try {
-    // @ts-ignore
-    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    const accounts = (await provider.request({ method: "eth_requestAccounts" })) as string[];
+
+    if (!accounts || accounts.length === 0) {
+      showMessage("No se recibió ninguna cuenta de MetaMask.");
+      return;
+    }
+
     const account = accounts[0];
     wallet = account;
     console.log(account);
-    
-    // Mostrar la dirección de la billetera en la página
-    const addressContainer = document.getElementById("wallet-address");
-    if (addressContainer) {
-      addressContainer.textContent = "Dirección de la billetera: " + account;
+
+    if (walletValue) {
+      walletValue.textContent = account;
     }
+
+    if (walletAddressContainer) {
+      walletAddressContainer.textContent = "Dirección de la billetera: " + account;
+    }
+
+    showMessage("Wallet conectada: " + account);
   } catch (error) {
     console.error("Error al conectar con MetaMask:", error);
-    
-    // Mostrar mensaje de error en la página
-    const addressContainer = document.getElementById("output");
-    if (addressContainer) {
-      
-      const p = document.createElement("p");
-     p.textContent = "Error al conectar con MetaMask ❌";
-     addressContainer.appendChild(p);
-    }
+    showMessage("Error al conectar con MetaMask ❌");
   }
 }
