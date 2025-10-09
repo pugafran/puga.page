@@ -78,20 +78,34 @@ consoleInput.addEventListener("input", () => {
 });
 
 function connectMeta() {
-  if (typeof ethereum !== 'undefined') {
-    ethereum.request({ method: "eth_requestAccounts" })
-      .then(accounts => {
-        const walletAddress = accounts[0];
-        appendToConsole("Wallet conectada: " + walletAddress);
-        document.getElementById("wallet-value").textContent = walletAddress;
-      })
-      .catch(err => {
-        appendToConsole("Error al conectar con MetaMask ❌");
-        console.error(err);
-      });
-  } else {
+  var _a;
+  const provider = (_a = window) === null || _a === void 0 ? void 0 : _a.ethereum;
+  const walletValue = document.getElementById("wallet-value");
+  if (!provider) {
     appendToConsole("MetaMask no está disponible.");
+    return;
   }
+  provider
+    .request({ method: "eth_requestAccounts" })
+    .then(accounts => {
+      if (!accounts || accounts.length === 0) {
+        appendToConsole("No se recibió ninguna cuenta de MetaMask.");
+        return;
+      }
+      const walletAddress = accounts[0];
+      appendToConsole("Wallet conectada: " + walletAddress);
+      if (walletValue) {
+        walletValue.textContent = walletAddress;
+      }
+      const walletAddressContainer = document.getElementById("wallet-address");
+      if (walletAddressContainer) {
+        walletAddressContainer.textContent = "Dirección de la billetera: " + walletAddress;
+      }
+    })
+    .catch(err => {
+      appendToConsole("Error al conectar con MetaMask ❌");
+      console.error(err);
+    });
 }
 
 function dox() {
