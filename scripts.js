@@ -30,17 +30,20 @@ const commands = {
     return "";
   },
   web3: () => {
+    ensureWeb3PanelVisible();
     connectMeta({ fromCommand: true });
     return "Inicializando Web3...";
   },
   date: () => new Date().toString(),
   mint: () => {
+    ensureWeb3PanelVisible();
     mintHackerBadge({ fromCommand: true });
     return "Firmando NFT de regalo...";
   }
 };
 
 const provider = window.ethereum;
+const web3Panel = document.getElementById("web3-panel");
 const metaElements = {
   connectionPill: document.getElementById("connection-pill"),
   connectButton: document.getElementById("connect-metamask"),
@@ -72,6 +75,12 @@ const KNOWN_NETWORKS = {
   "0x14a33": { name: "Base Goerli", symbol: "ETH" },
   "0x2a": { name: "Kovan Testnet", symbol: "ETH" }
 };
+
+function ensureWeb3PanelVisible() {
+  if (web3Panel) {
+    web3Panel.classList.remove("hidden");
+  }
+}
 
 function updateConnectionPill(state) {
   if (!metaElements.connectionPill) return;
