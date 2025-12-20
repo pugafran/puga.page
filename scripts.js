@@ -42,6 +42,171 @@ const commands = {
   }
 };
 
+// CHAT & FS VARIABLES
+let isChatMode = false;
+let chatSessionId = crypto.randomUUID();
+
+// FILE SYSTEM VARIABLES
+const fileSystem = {
+  type: "dir",
+  children: {
+    "projects": {
+      type: "dir",
+      children: {
+        "readme.txt": { type: "file", content: "Mis proyectos están en construction..." },
+        "portfolio.md": { type: "file", content: "# Portfolio\n- Neonao\n- Puga Page" }
+      }
+    },
+    "about.txt": { type: "file", content: "Soy Francisco Gabriel Puga Lojo.\nDesarrollador y entusiasta de la tecnología." },
+    "contact.txt": { type: "file", content: "Email: contacto@puga.page\nGitHub: github.com/pugafran" },
+    "secret_key": { type: "file", content: "0x1234..." }
+  }
+};
+
+let currentPath = []; // Root is empty array
+let currentDir = fileSystem;
+
+// HELPERS
+function getDir(pathArray) {
+  let dir = fileSystem;
+  for (const part of pathArray) {
+    if (dir.children && dir.children[part]) {
+      dir = dir.children[part];
+    } else {
+      return null;
+    }
+  }
+  return dir;
+}
+
+function updatePrompt() {
+  const pathStr = currentPath.length === 0 ? "~" : "~/" + currentPath.join("/");
+  const inputContainer = document.querySelector("#input").parentElement.parentElement;
+  const promptSpan = inputContainer.querySelector("span");
+  if (promptSpan && !isChatMode) {
+      promptSpan.innerHTML = `puga@page:${pathStr}$`;
+  }
+}
+
+// EXTEND COMMANDS WITH FS & CHAT
+commands.ls = () => {
+  if (currentDir.type !== "dir") return "Not a directory";
+  const items = Object.keys(currentDir.children || {}).map(name => {
+    const isDir = currentDir.children[name].type === "dir";
+    return isDir ? `<span class="text-blue-500">${name}/</span>` : name;
+  });
+  return items.join("  ");
+};
+
+commands.cd = (args) => {
+  if (!args || args.length === 0) {
+    currentPath = [];
+    currentDir = fileSystem;
+    updatePrompt();
+    return "";
+  }
+  const target = args[0];
+  if (target === "/") {
+    currentPath = [];
+    currentDir = fileSystem;
+  } else if (target === "..") {
+    if (currentPath.length > 0) {
+      currentPath.pop();
+      currentDir = getDir(currentPath);
+    }
+  } else {
+    if (currentDir.children && currentDir.children[target] && currentDir.children[target].type === "dir") {
+      currentPath.push(target);
+      currentDir = currentDir.children[target];
+    } else {
+      return `bash: cd: ${target}: No such file or directory`;
+    }
+  }
+  updatePrompt();
+  return "";
+};
+
+commands.cat = (args) => {
+    if (!args || args.length === 0) return "Usage: cat <filename>";
+    const filename = args[0];
+    if (currentDir.children && currentDir.children[filename]) {
+        const node = currentDir.children[filename];
+        if (node.type === "file") {
+            return node.content;
+        } else {
+            return `cat: ${filename}: Is a directory`;
+        }
+    }
+    return `cat: ${filename}: No such file or directory`;
+}
+
+commands.chat = () => {
+  isChatMode = true;
+  chatSessionId = crypto.randomUUID(); 
+  const inputContainer = document.querySelector("#input").parentElement.parentElement;
+  const promptSpan = inputContainer.querySelector("span");
+  if(promptSpan) {
+     promptSpan.innerHTML = "chat@neonao:~$";
+     promptSpan.classList.remove("text-green-500");
+     promptSpan.classList.add("text-blue-500");
+  }
+  return "Iniciando conexión segura con NeoNao AI... 🤖\nEscribe 'exit' para salir.";
+};
+
+async function handleChat(message) {
+  if (message.toLowerCase() === "exit") {
+    isChatMode = false;
+    updatePrompt(); 
+    const inputContainer = document.querySelector("#input").parentElement.parentElement;
+    const promptSpan = inputContainer.querySelector("span");
+    if (promptSpan) {
+         promptSpan.classList.remove("text-blue-500");
+         promptSpan.classList.add("text-green-500");
+    }
+    appendToConsole("Desconectado del chat.", true);
+    return;
+  }
+
+  const pUser = document.createElement("p");
+  pUser.innerHTML = `<span class="text-blue-500">chat@neonao:~$</span> ${message}`;
+  consoleOutput.appendChild(pUser);
+  consoleOutput.scrollTop = consoleOutput.scrollHeight;
+
+  try {
+    const res = await fetch("https://api.neonao.es/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message, sessionId: chatSessionId }),
+    });
+
+    let data = "";
+    try {
+      data = await res.json();
+    } catch {
+      data = await res.text();
+    }
+
+    const replyRaw = (typeof data === "object" && data !== null)
+      ? (data.message ?? data.response ?? JSON.stringify(data))
+      : data;
+
+    const reply = String(replyRaw); 
+
+    const pBot = document.createElement("p");
+    pBot.className = "text-purple-400"; 
+    pBot.innerText = reply; 
+    consoleOutput.appendChild(pBot);
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+
+  } catch (err) {
+    console.error(err);
+    const pError = document.createElement("p");
+    pError.className = "text-red-500";
+    pError.innerText = "Error al comunicar con el servidor.";
+    consoleOutput.appendChild(pError);
+  }
+}
+
 const provider = window.ethereum;
 const web3Panel = document.getElementById("web3-panel");
 const metaElements = {
@@ -515,36 +680,6 @@ consoleInput.addEventListener("input", () => {
   autocompleteSuggestion.textContent = match ? match.substring(text.length) : "";
 });
 
-function connectMeta() {
-  var _a;
-  const provider = (_a = window) === null || _a === void 0 ? void 0 : _a.ethereum;
-  const walletValue = document.getElementById("wallet-value");
-  if (!provider) {
-    appendToConsole("MetaMask no está disponible.");
-    return;
-  }
-  provider
-    .request({ method: "eth_requestAccounts" })
-    .then(accounts => {
-      if (!accounts || accounts.length === 0) {
-        appendToConsole("No se recibió ninguna cuenta de MetaMask.");
-        return;
-      }
-      const walletAddress = accounts[0];
-      appendToConsole("Wallet conectada: " + walletAddress);
-      if (walletValue) {
-        walletValue.textContent = walletAddress;
-      }
-      const walletAddressContainer = document.getElementById("wallet-address");
-      if (walletAddressContainer) {
-        walletAddressContainer.textContent = "Dirección de la billetera: " + walletAddress;
-      }
-    })
-    .catch(err => {
-      appendToConsole("Error al conectar con MetaMask ❌");
-      console.error(err);
-    });
-}
 
 function dox() {
   fetch("https://ipwho.is/")
