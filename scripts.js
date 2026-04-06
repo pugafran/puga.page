@@ -17,6 +17,7 @@ words.split("").forEach((char, i) => {
 const consoleOutput = document.getElementById("output");
 const consoleInput = document.getElementById("input");
 const autocompleteSuggestion = document.getElementById("autocomplete-suggestion");
+let currentAutocompleteMatch = "";
 
 const commands = {
   help: () => "Comandos disponibles:\nhelp, whoami, projects, clear, web3, date, chat, ls, cd, cat, mint",
@@ -637,12 +638,52 @@ function appendToConsole(text, isCommand = false) {
   consoleOutput.scrollTop = consoleOutput.scrollHeight;
 }
 
+function updateAutocompleteSuggestion(value) {
+  if (isChatMode) {
+    currentAutocompleteMatch = "";
+    autocompleteSuggestion.textContent = "";
+    return;
+  }
+
+  const text = value.trimStart();
+  if (!text) {
+    currentAutocompleteMatch = "";
+    autocompleteSuggestion.textContent = "";
+    return;
+  }
+
+  const matches = Object.keys(commands).filter(cmd => cmd.startsWith(text));
+  const match = matches.length === 1 ? matches[0] : "";
+  if (!match || match === text) {
+    currentAutocompleteMatch = "";
+    autocompleteSuggestion.textContent = "";
+    return;
+  }
+
+  currentAutocompleteMatch = match;
+  const leadingWhitespace = value.slice(0, value.length - text.length);
+  const remainder = match.slice(text.length);
+  autocompleteSuggestion.innerHTML = `${leadingWhitespace}<span class="invisible">${text}</span>${remainder}`;
+}
+
+function acceptAutocompleteSuggestion() {
+  if (!currentAutocompleteMatch || isChatMode) {
+    return false;
+  }
+
+  consoleInput.value = currentAutocompleteMatch;
+  currentAutocompleteMatch = "";
+  autocompleteSuggestion.textContent = "";
+  return true;
+}
+
 consoleInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     const input = consoleInput.value.trim();
     if (!input) return; 
 
     consoleInput.value = "";
+    currentAutocompleteMatch = "";
     autocompleteSuggestion.textContent = "";
 
     if (isChatMode) {
@@ -663,41 +704,116 @@ consoleInput.addEventListener("keydown", function (e) {
     }
     
     setTimeout(() => consoleInput.focus(), 0);
-  } else if (e.key === "Tab" && !isChatMode) { // Disable autocomplete in chat mode
+  } else if (e.key === "Tab" && !isChatMode) {
     e.preventDefault();
-    const inputText = consoleInput.value.trim();
-    const matches = Object.keys(commands).filter(cmd => cmd.startsWith(inputText));
-    if (matches.length === 1) {
-      consoleInput.value = matches[0];
-      autocompleteSuggestion.textContent = "";
+    acceptAutocompleteSuggestion();
+  } else if (e.key === "ArrowRight" && !isChatMode) {
+    const accepted = acceptAutocompleteSuggestion();
+    if (accepted) {
+      e.preventDefault();
     }
   }
 });
 
 consoleInput.addEventListener("input", () => {
-  const text = consoleInput.value.trim();
-  const match = Object.keys(commands).find(cmd => cmd.startsWith(text));
-  autocompleteSuggestion.textContent = match ? match.substring(text.length) : "";
+  updateAutocompleteSuggestion(consoleInput.value);
 });
 
 
-function dox() {
-  fetch("https://ipwho.is/")
-    .then(res => res.json())
-    .then(data => {
-      const isVpn = isVPN(data.ip);
-      const suffix = isVpn ? " (VPN Detectada)" : "";
+function setIpInfoValue(elementId, value) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.textContent = value;
+  }
+}
 
-      document.getElementById("ip-value").textContent = data.ip + suffix;
-      document.getElementById("provider-value").textContent = data.connection.org + suffix;
-      document.getElementById("country-value").textContent = data.country + suffix;
-      document.getElementById("region-value").textContent = data.region + suffix;
-      document.getElementById("city-value").textContent = data.city + suffix;
-      document.getElementById("postal-value").textContent = data.postal + suffix;
-    })
-    .catch(err => {
-      console.error("Error en dox:", err);
-    });
+function setIpInfoFallback(message = "No disponible") {
+  setIpInfoValue("ip-value", message);
+  setIpInfoValue("provider-value", message);
+  setIpInfoValue("country-value", message);
+  setIpInfoValue("region-value", message);
+  setIpInfoValue("city-value", message);
+  setIpInfoValue("postal-value", message);
+}
+
+async function fetchJsonWithTimeout(url, timeoutMs = 4000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return await response.json();
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function normalizeIpInfo(data, source) {
+  if (source === "ipwho") {
+    if (!data || data.success === false || !data.ip) {
+      return null;
+    }
+
+    return {
+      ip: data.ip,
+      provider: data.connection?.org || data.connection?.isp || "Desconocido",
+      country: data.country || "Desconocido",
+      region: data.region || "Desconocido",
+      city: data.city || "Desconocido",
+      postal: data.postal || "Desconocido"
+    };
+  }
+
+  if (source === "ipapi") {
+    if (!data || !data.ip) {
+      return null;
+    }
+
+    return {
+      ip: data.ip,
+      provider: data.org || data.org_name || "Desconocido",
+      country: data.country_name || data.country || "Desconocido",
+      region: data.region || "Desconocido",
+      city: data.city || "Desconocido",
+      postal: data.postal || "Desconocido"
+    };
+  }
+
+  return null;
+}
+
+async function dox() {
+  const providers = [
+    { url: "https://ipwho.is/", source: "ipwho" },
+    { url: "https://ipapi.co/json/", source: "ipapi" }
+  ];
+
+  for (const provider of providers) {
+    try {
+      const data = await fetchJsonWithTimeout(provider.url);
+      const info = normalizeIpInfo(data, provider.source);
+
+      if (!info) {
+        throw new Error(`Respuesta incompleta de ${provider.source}`);
+      }
+
+      const suffix = isVPN(info.ip) ? " (VPN Detectada)" : "";
+      setIpInfoValue("ip-value", info.ip + suffix);
+      setIpInfoValue("provider-value", info.provider + suffix);
+      setIpInfoValue("country-value", info.country + suffix);
+      setIpInfoValue("region-value", info.region + suffix);
+      setIpInfoValue("city-value", info.city + suffix);
+      setIpInfoValue("postal-value", info.postal + suffix);
+      return;
+    } catch (err) {
+      console.error(`Error cargando IP desde ${provider.source}:`, err);
+    }
+  }
+
+  setIpInfoFallback();
 }
 
 function isVPN(ip) {
