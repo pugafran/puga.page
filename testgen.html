@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlas Test Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0f1f35;
+      --panel: rgba(10, 20, 36, 0.72);
+      --panel-strong: rgba(10, 20, 36, 0.9);
+      --line: rgba(166, 204, 255, 0.18);
+      --text: #f4efe5;
+      --muted: #abbbd0;
+      --accent: #ff9f5a;
+      --accent-2: #7ce0d6;
+      --good: #7ef0a7;
+      --bad: #ff8e8e;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      --radius: 24px;
+      --radius-sm: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 159, 90, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(124, 224, 214, 0.14), transparent 24%),
+        linear-gradient(135deg, #050b14 0%, #081321 45%, #0a1a2d 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 28rem;
+      height: 28rem;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    body::before {
+      top: -8rem;
+      left: -8rem;
+      background: #ff9f5a;
+    }
+
+    body::after {
+      right: -10rem;
+      bottom: -10rem;
+      background: #5ec4ff;
+    }
+
+    .page-shell {
+      width: min(1380px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-copy h1 {
+      margin: 0.35rem 0 1rem;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3rem, 6vw, 5.4rem);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-text,
+    .eyebrow,
+    .section-kicker,
+    .hint-box,
+    .field span,
+    .progress-meta,
+    .theme-size,
+    .theme-order,
+    .review-meta,
+    .history-meta,
+    .empty-state {
+      color: var(--muted);
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.76rem;
+    }
+
+    .hero-text {
+      max-width: 48rem;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .hero-orbit {
+      position: relative;
+      min-height: 18rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-orbit::before {
+      content: "";
+      position: absolute;
+      width: 14rem;
+      height: 14rem;
+      border-radius: 50%;
+      border: 1px solid rgba(166, 204, 255, 0.15);
+      box-shadow: inset 0 0 40px rgba(124, 224, 214, 0.06);
+    }
+
+    .orbit-card {
+      position: absolute;
+      min-width: 13rem;
+      padding: 1rem 1.15rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .orbit-card span {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .orbit-card strong {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 1.15rem;
+    }
+
+    .orbit-card.glass {
+      top: 0.5rem;
+      left: 0.5rem;
+    }
+
+    .orbit-card.accent {
+      right: 0.2rem;
+      bottom: 0.8rem;
+      background: linear-gradient(135deg, rgba(255, 159, 90, 0.88), rgba(255, 126, 95, 0.72));
+      color: #1f1008;
+    }
+
+    .orbit-card.accent span {
+      color: rgba(31, 16, 8, 0.7);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr 0.9fr;
+      gap: 1.25rem;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .glass {
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+    }
+
+    .composer {
+      grid-column: 1 / 3;
+    }
+
+    .controls,
+    .theme-panel,
+    .history-panel,
+    .live-review,
+    .quiz-panel {
+      min-height: 100%;
+    }
+
+    .theme-panel,
+    .history-panel {
+      grid-column: 3 / 4;
+    }
+
+    .quiz-panel {
+      grid-column: 1 / 3;
+    }
+
+    .live-review {
+      grid-column: 3 / 4;
+    }
+
+    .history-panel {
+      grid-column: 1 / 4;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel-head h2 {
+      margin: 0.15rem 0 0;
+      font-size: 1.15rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .field span {
+      font-size: 0.9rem;
+    }
+
+    textarea,
+    select,
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid rgba(166, 204, 255, 0.14);
+      border-radius: 18px;
+      background: rgba(3, 8, 18, 0.72);
+      color: var(--text);
+      padding: 0.9rem 1rem;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 20rem;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    textarea:focus,
+    select:focus,
+    input[type="number"]:focus,
+    .option-button:focus,
+    .theme-card:focus {
+      outline: 2px solid rgba(124, 224, 214, 0.6);
+      outline-offset: 2px;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(166, 204, 255, 0.14);
+      border-radius: 18px;
+      background: rgba(3, 8, 18, 0.52);
+    }
+
+    .toggle input {
+      width: 1.15rem;
+      height: 1.15rem;
+      accent-color: var(--accent-2);
+    }
+
+    .import-actions,
+    .session-actions,
+    .completion-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    button,
+    .file-pill {
+      border: 0;
+      border-radius: 999px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    button:hover,
+    .file-pill:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary-button,
+    .ghost-button,
+    .file-pill {
+      padding: 0.9rem 1.15rem;
+    }
+
+    .primary-button {
+      background: linear-gradient(135deg, var(--accent), #ff6f61);
+      color: #180d07;
+      box-shadow: 0 12px 34px rgba(255, 111, 97, 0.24);
+    }
+
+    .ghost-button,
+    .file-pill {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      border: 1px solid rgba(166, 204, 255, 0.14);
+    }
+
+    .ghost-button.danger {
+      color: #ffd3d3;
+    }
+
+    .file-pill {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .file-pill input {
+      display: none;
+    }
+
+    .hint-box {
+      display: grid;
+      gap: 0.45rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(166, 204, 255, 0.16);
+    }
+
+    .hint-box p {
+      margin: 0;
+    }
+
+    .hint-box code {
+      display: block;
+      white-space: pre-wrap;
+    }
+
+    .count-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .theme-index,
+    .review-list,
+    .history-list {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .theme-card {
+      width: 100%;
+      display: grid;
+      gap: 0.35rem;
+      text-align: left;
+      padding: 1rem;
+      color: var(--text);
+      border: 1px solid rgba(166, 204, 255, 0.14);
+      background:
+        linear-gradient(135deg, rgba(255, 159, 90, 0.12), transparent 55%),
+        rgba(255, 255, 255, 0.03);
+      border-radius: 18px;
+    }
+
+    .theme-card strong {
+      font-size: 1.02rem;
+    }
+
+    .theme-card.active {
+      border-color: rgba(124, 224, 214, 0.58);
+      box-shadow: 0 0 0 1px rgba(124, 224, 214, 0.24) inset;
+    }
+
+    .progress-strip {
+      display: grid;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 0.75rem;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      transition: width 220ms ease;
+    }
+
+    .progress-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    .quiz-stage {
+      min-height: 20rem;
+    }
+
+    .question-card,
+    .summary-card,
+    .review-card,
+    .history-card {
+      border: 1px solid rgba(166, 204, 255, 0.12);
+      border-radius: 22px;
+      background: rgba(3, 8, 18, 0.58);
+    }
+
+    .question-card {
+      padding: 1.2rem;
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .question-text {
+      margin: 0 0 1.1rem;
+      font-size: clamp(1.25rem, 2vw, 1.6rem);
+      line-height: 1.35;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .option-button {
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1rem 1rem 1.1rem;
+      border-radius: 18px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(166, 204, 255, 0.12);
+    }
+
+    .option-button small {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--accent-2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .option-button.correct {
+      border-color: rgba(126, 240, 167, 0.6);
+      background: rgba(126, 240, 167, 0.12);
+    }
+
+    .option-button.incorrect {
+      border-color: rgba(255, 142, 142, 0.58);
+      background: rgba(255, 142, 142, 0.12);
+    }
+
+    .feedback-box,
+    .summary-card {
+      margin-top: 1rem;
+    }
+
+    .feedback-box {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .feedback-box.good {
+      border: 1px solid rgba(126, 240, 167, 0.32);
+    }
+
+    .feedback-box.bad {
+      border: 1px solid rgba(255, 142, 142, 0.28);
+    }
+
+    .summary-card {
+      padding: 1.2rem;
+    }
+
+    .summary-card h3,
+    .review-title,
+    .history-title {
+      margin-top: 0;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .summary-metric {
+      padding: 0.95rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .summary-metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .summary-metric strong {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 1.25rem;
+    }
+
+    .review-card,
+    .history-card {
+      padding: 1rem;
+    }
+
+    .review-card.good {
+      border-color: rgba(126, 240, 167, 0.18);
+    }
+
+    .review-card.bad {
+      border-color: rgba(255, 142, 142, 0.22);
+    }
+
+    .review-card p,
+    .history-card p,
+    .summary-card p {
+      margin: 0.4rem 0;
+    }
+
+    .review-answer.good,
+    .history-status.good {
+      color: var(--good);
+    }
+
+    .review-answer.bad,
+    .history-status.bad {
+      color: var(--bad);
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 2rem 1rem;
+      min-height: 9rem;
+      border: 1px dashed rgba(166, 204, 255, 0.14);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .composer,
+      .quiz-panel,
+      .theme-panel,
+      .live-review,
+      .history-panel {
+        grid-column: auto;
+      }
+
+      .hero-orbit {
+        min-height: 12rem;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        width: min(100% - 1rem, 100%);
+        padding-top: 1rem;
+      }
+
+      .panel {
+        padding: 1rem;
+        border-radius: 20px;
+      }
+
+      .settings-grid,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-meta,
+      .panel-head,
+      .import-actions,
+      .session-actions,
+      .completion-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Generador visual de tests</p>
+        <h1>Convierte un JSON en una experiencia de estudio viva.</h1>
+        <p class="hero-text">
+          Importa uno o varios temas, elige el modo de juego, revisa tus fallos en tiempo real
+          y guarda todo el historial en el navegador.
+        </p>
+      </div>
+      <div class="hero-orbit">
+        <div class="orbit-card glass">
+          <span>Local</span>
+          <strong id="stats-history-count">0 sesiones</strong>
+        </div>
+        <div class="orbit-card accent">
+          <span>Modo infinito</span>
+          <strong>hasta dominarlo</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="panel glass composer">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Entrada</p>
+            <h2>Fuente de preguntas</h2>
+          </div>
+          <button id="load-sample-btn" class="ghost-button">Cargar ejemplo</button>
+        </div>
+
+        <label class="field">
+          <span>JSON</span>
+          <textarea id="json-input" spellcheck="false" placeholder='Pega aquí tu JSON...'></textarea>
+        </label>
+
+        <div class="import-actions">
+          <label class="file-pill">
+            <input id="json-file-input" type="file" accept=".json,application/json">
+            <span>Importar archivo</span>
+          </label>
+          <button id="parse-json-btn" class="primary-button">Preparar temas</button>
+        </div>
+
+        <div class="hint-box">
+          <p>Formato admitido:</p>
+          <code>{ "tema": "...", "preguntas": [...] }</code>
+          <code>{ "temas": [{ "tema": "...", "preguntas": [...] }] }</code>
+        </div>
+      </section>
+
+      <section class="panel glass controls">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Configuración</p>
+            <h2>Opciones parametrizables</h2>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <label class="field">
+            <span>Modo</span>
+            <select id="mode-select">
+              <option value="normal">Normal: una pasada</option>
+              <option value="infinite">Infinito: hasta acertarlas todas</option>
+              <option value="lives">Fallos limitados</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Fallos máximos</span>
+            <input id="max-mistakes-input" type="number" min="1" max="99" value="3">
+          </label>
+
+          <label class="field toggle">
+            <span>Barajar preguntas</span>
+            <input id="shuffle-questions-input" type="checkbox" checked>
+          </label>
+
+          <label class="field toggle">
+            <span>Barajar opciones</span>
+            <input id="shuffle-options-input" type="checkbox" checked>
+          </label>
+
+          <label class="field toggle">
+            <span>Mostrar corrección inmediata</span>
+            <input id="instant-feedback-input" type="checkbox" checked>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel glass theme-panel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Índice</p>
+            <h2>Temas disponibles</h2>
+          </div>
+          <span id="theme-count-pill" class="count-pill">0 temas</span>
+        </div>
+        <div id="theme-index" class="theme-index empty-state">
+          Importa un JSON para ver aquí el índice de temas.
+        </div>
+      </section>
+
+      <section class="panel glass quiz-panel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Sesión activa</p>
+            <h2 id="quiz-title">Esperando un tema</h2>
+          </div>
+          <span id="mode-pill" class="count-pill">Sin iniciar</span>
+        </div>
+
+        <div class="progress-strip">
+          <div class="progress-track">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="progress-label">0 / 0 respondidas</span>
+            <span id="score-label">Aciertos: 0</span>
+            <span id="mistakes-label">Fallos: 0</span>
+          </div>
+        </div>
+
+        <div id="quiz-stage" class="quiz-stage empty-state">
+          Selecciona un tema para empezar la sesión.
+        </div>
+      </section>
+
+      <aside class="panel glass live-review">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Revisión</p>
+            <h2>Errores y respuestas</h2>
+          </div>
+        </div>
+        <div id="review-list" class="review-list empty-state">
+          Aquí aparecerán tus respuestas y las correcciones.
+        </div>
+      </aside>
+
+      <section class="panel glass history-panel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Memoria local</p>
+            <h2>Historial de puntuaciones</h2>
+          </div>
+          <button id="clear-history-btn" class="ghost-button danger">Borrar historial</button>
+        </div>
+        <div id="history-list" class="history-list empty-state">
+          Todavía no hay sesiones guardadas.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <template id="theme-card-template">
+    <button class="theme-card" type="button">
+      <span class="theme-order"></span>
+      <strong class="theme-name"></strong>
+      <span class="theme-size"></span>
+    </button>
+  </template>
+
+  <script>
+    const STORAGE_KEYS = {
+      dataset: "atlas-test-lab.dataset",
+      settings: "atlas-test-lab.settings",
+      history: "atlas-test-lab.history",
+      session: "atlas-test-lab.session",
+    };
+
+    const SAMPLE_DATA = {
+      temas: [
+        {
+          tema: "Tecnicas histoenzimaticas",
+          preguntas: [
+            {
+              id: 45,
+              pregunta: "Una enzima EC5 se caracteriza por:",
+              opciones: {
+                A: "Transferir electrones",
+                B: "Catalizar hidrólisis",
+                C: "Sintetizar enlaces",
+                D: "Reorganizar estructuras moleculares",
+              },
+              respuesta_correcta: "D",
+            },
+            {
+              id: 46,
+              pregunta: "La tinción tricrómica es especialmente útil para:",
+              opciones: {
+                A: "Diferenciar tipos de fibras",
+                B: "Valorar fibrosis",
+                C: "Identificar mitocondrias",
+                D: "Detectar lípidos",
+              },
+              respuesta_correcta: "B",
+            },
+            {
+              id: 47,
+              pregunta: "¿Qué factor NO influye directamente en la actividad enzimática?",
+              opciones: {
+                A: "pH",
+                B: "Temperatura",
+                C: "Sustrato",
+                D: "Espesor de la cubreobjeto",
+              },
+              respuesta_correcta: "D",
+            },
+            {
+              id: 48,
+              pregunta: "El precipitado insoluble es esencial porque:",
+              opciones: {
+                A: "Aumenta resolución electrónica",
+                B: "Facilita fluorescencia",
+                C: "Permite localización microscópica",
+                D: "Evita difusión",
+              },
+              respuesta_correcta: "C",
+            },
+          ],
+        },
+        {
+          tema: "Bioquimica aplicada",
+          preguntas: [
+            {
+              id: 101,
+              pregunta: "La fosfatasa alcalina es una:",
+              opciones: {
+                A: "Oxidoreductasa",
+                B: "Transferasa",
+                C: "Hidrolasa",
+                D: "Ligasa",
+              },
+              respuesta_correcta: "C",
+            },
+            {
+              id: 102,
+              pregunta: "Una enzima que fija CO2 pertenece a:",
+              opciones: {
+                A: "Liasas",
+                B: "Hidrolasas",
+                C: "Transferasas",
+                D: "Ligasas",
+              },
+              respuesta_correcta: "D",
+            },
+          ],
+        },
+      ],
+    };
+
+    const els = {
+      jsonInput: document.querySelector("#json-input"),
+      fileInput: document.querySelector("#json-file-input"),
+      parseButton: document.querySelector("#parse-json-btn"),
+      sampleButton: document.querySelector("#load-sample-btn"),
+      modeSelect: document.querySelector("#mode-select"),
+      maxMistakesInput: document.querySelector("#max-mistakes-input"),
+      shuffleQuestionsInput: document.querySelector("#shuffle-questions-input"),
+      shuffleOptionsInput: document.querySelector("#shuffle-options-input"),
+      instantFeedbackInput: document.querySelector("#instant-feedback-input"),
+      themeIndex: document.querySelector("#theme-index"),
+      themeCountPill: document.querySelector("#theme-count-pill"),
+      quizTitle: document.querySelector("#quiz-title"),
+      modePill: document.querySelector("#mode-pill"),
+      progressBar: document.querySelector("#progress-bar"),
+      progressLabel: document.querySelector("#progress-label"),
+      scoreLabel: document.querySelector("#score-label"),
+      mistakesLabel: document.querySelector("#mistakes-label"),
+      quizStage: document.querySelector("#quiz-stage"),
+      reviewList: document.querySelector("#review-list"),
+      historyList: document.querySelector("#history-list"),
+      clearHistoryButton: document.querySelector("#clear-history-btn"),
+      statsHistoryCount: document.querySelector("#stats-history-count"),
+      themeCardTemplate: document.querySelector("#theme-card-template"),
+    };
+
+    const appState = {
+      themes: [],
+      history: [],
+      settings: loadSettings(),
+      activeThemeIndex: null,
+      session: null,
+    };
+
+    boot();
+
+    function boot() {
+      wireEvents();
+      hydrateSavedState();
+      renderAll();
+    }
+
+    function wireEvents() {
+      els.sampleButton.addEventListener("click", () => {
+        els.jsonInput.value = JSON.stringify(SAMPLE_DATA, null, 2);
+        parseCurrentJson();
+      });
+
+      els.parseButton.addEventListener("click", parseCurrentJson);
+
+      els.fileInput.addEventListener("change", async (event) => {
+        const [file] = event.target.files || [];
+        if (!file) {
+          return;
+        }
+
+        const text = await file.text();
+        els.jsonInput.value = text;
+        parseCurrentJson();
+      });
+
+      els.modeSelect.addEventListener("change", persistSettingsFromForm);
+      els.maxMistakesInput.addEventListener("input", persistSettingsFromForm);
+      els.shuffleQuestionsInput.addEventListener("change", persistSettingsFromForm);
+      els.shuffleOptionsInput.addEventListener("change", persistSettingsFromForm);
+      els.instantFeedbackInput.addEventListener("change", persistSettingsFromForm);
+
+      els.clearHistoryButton.addEventListener("click", () => {
+        appState.history = [];
+        localStorage.removeItem(STORAGE_KEYS.history);
+        renderHistory();
+      });
+    }
+
+    function hydrateSavedState() {
+      const savedDataset = loadJson(STORAGE_KEYS.dataset, null);
+      const savedHistory = loadJson(STORAGE_KEYS.history, []);
+      const savedSession = loadJson(STORAGE_KEYS.session, null);
+
+      appState.history = Array.isArray(savedHistory) ? savedHistory : [];
+      syncSettingsToForm();
+
+      if (savedDataset) {
+        const normalizedThemes = normalizeDataset(savedDataset);
+        appState.themes = normalizedThemes;
+        els.jsonInput.value = JSON.stringify(savedDataset, null, 2);
+      }
+
+      if (savedSession && savedSession.themeIndex < appState.themes.length) {
+        appState.session = savedSession;
+        appState.activeThemeIndex = savedSession.themeIndex;
+      }
+    }
+
+    function parseCurrentJson() {
+      try {
+        const raw = els.jsonInput.value.trim();
+        if (!raw) {
+          throw new Error("No hay JSON para importar.");
+        }
+
+        const parsed = JSON.parse(raw);
+        const normalizedThemes = normalizeDataset(parsed);
+
+        appState.themes = normalizedThemes;
+        appState.activeThemeIndex = null;
+        appState.session = null;
+
+        saveJson(STORAGE_KEYS.dataset, parsed);
+        localStorage.removeItem(STORAGE_KEYS.session);
+
+        renderAll();
+      } catch (error) {
+        window.alert(error.message);
+      }
+    }
+
+    function normalizeDataset(source) {
+      const temas = Array.isArray(source == null ? void 0 : source.temas)
+        ? source.temas
+        : (source == null ? void 0 : source.tema) && Array.isArray(source == null ? void 0 : source.preguntas)
+          ? [source]
+          : null;
+
+      if (!(temas == null ? void 0 : temas.length)) {
+        throw new Error("El JSON debe contener `tema` + `preguntas` o una colección `temas`.");
+      }
+
+      return temas.map((tema, index) => {
+        if (!tema.tema || !Array.isArray(tema.preguntas) || !tema.preguntas.length) {
+          throw new Error(`El tema ${index + 1} no tiene el formato esperado.`);
+        }
+
+        return {
+          tema: String(tema.tema),
+          preguntas: tema.preguntas.map((pregunta, qIndex) => normalizeQuestion(pregunta, qIndex)),
+        };
+      });
+    }
+
+    function normalizeQuestion(question, index) {
+      const optionEntries = Object.entries(question.opciones || {});
+      if (!question.pregunta || !optionEntries.length || !question.respuesta_correcta) {
+        throw new Error(`La pregunta ${index + 1} está incompleta.`);
+      }
+
+      return {
+        id: question.id ?? index + 1,
+        pregunta: String(question.pregunta),
+        opciones: optionEntries.map(([key, text]) => ({ key, text: String(text) })),
+        respuesta_correcta: String(question.respuesta_correcta),
+      };
+    }
+
+    function persistSettingsFromForm() {
+      appState.settings = {
+        mode: els.modeSelect.value,
+        maxMistakes: clamp(Number(els.maxMistakesInput.value) || 3, 1, 99),
+        shuffleQuestions: els.shuffleQuestionsInput.checked,
+        shuffleOptions: els.shuffleOptionsInput.checked,
+        instantFeedback: els.instantFeedbackInput.checked,
+      };
+
+      syncSettingsToForm();
+      saveJson(STORAGE_KEYS.settings, appState.settings);
+    }
+
+    function syncSettingsToForm() {
+      const { mode, maxMistakes, shuffleQuestions, shuffleOptions, instantFeedback } = appState.settings;
+      els.modeSelect.value = mode;
+      els.maxMistakesInput.value = String(maxMistakes);
+      els.shuffleQuestionsInput.checked = shuffleQuestions;
+      els.shuffleOptionsInput.checked = shuffleOptions;
+      els.instantFeedbackInput.checked = instantFeedback;
+    }
+
+    function loadSettings() {
+      return {
+        mode: "normal",
+        maxMistakes: 3,
+        shuffleQuestions: true,
+        shuffleOptions: true,
+        instantFeedback: true,
+        ...loadJson(STORAGE_KEYS.settings, {}),
+      };
+    }
+
+    function renderAll() {
+      renderThemeIndex();
+      renderQuiz();
+      renderReview();
+      renderHistory();
+    }
+
+    function renderThemeIndex() {
+      els.themeCountPill.textContent = `${appState.themes.length} tema${appState.themes.length === 1 ? "" : "s"}`;
+
+      if (!appState.themes.length) {
+        els.themeIndex.className = "theme-index empty-state";
+        els.themeIndex.textContent = "Importa un JSON para ver aquí el índice de temas.";
+        return;
+      }
+
+      els.themeIndex.className = "theme-index";
+      els.themeIndex.innerHTML = "";
+
+      appState.themes.forEach((theme, index) => {
+        const fragment = els.themeCardTemplate.content.cloneNode(true);
+        const card = fragment.querySelector(".theme-card");
+        card.querySelector(".theme-order").textContent = `Tema ${index + 1}`;
+        card.querySelector(".theme-name").textContent = theme.tema;
+        card.querySelector(".theme-size").textContent = `${theme.preguntas.length} preguntas`;
+
+        if (appState.activeThemeIndex === index) {
+          card.classList.add("active");
+        }
+
+        card.addEventListener("click", () => startTheme(index));
+        els.themeIndex.appendChild(fragment);
+      });
+    }
+
+    function startTheme(themeIndex) {
+      persistSettingsFromForm();
+
+      const theme = appState.themes[themeIndex];
+      const orderedQuestions = appState.settings.shuffleQuestions
+        ? shuffleArray(theme.preguntas)
+        : [...theme.preguntas];
+
+      appState.activeThemeIndex = themeIndex;
+      appState.session = {
+        themeIndex,
+        mode: appState.settings.mode,
+        maxMistakes: appState.settings.maxMistakes,
+        instantFeedback: appState.settings.instantFeedback,
+        queue: orderedQuestions.map((question) => question.id),
+        optionOrderMap: Object.fromEntries(
+          theme.preguntas.map((question) => [
+            question.id,
+            (appState.settings.shuffleOptions ? shuffleArray(question.opciones) : [...question.opciones]).map((option) => option.key),
+          ]),
+        ),
+        answered: [],
+        answeredMap: {},
+        currentQuestionId: (orderedQuestions[0] == null ? void 0 : orderedQuestions[0].id) ?? null,
+        attempts: 0,
+        score: 0,
+        mistakes: 0,
+        round: 1,
+        pendingRetryIds: [],
+        completedIds: [],
+        awaitingAdvance: false,
+        pendingTransition: null,
+        status: "active",
+        finishedAt: null,
+      };
+
+      persistSession();
+      renderAll();
+    }
+
+    function renderQuiz() {
+      const theme = getActiveTheme();
+
+      if (!theme || !appState.session) {
+        els.quizTitle.textContent = "Esperando un tema";
+        els.modePill.textContent = "Sin iniciar";
+        els.progressBar.style.width = "0%";
+        els.progressLabel.textContent = "0 / 0 respondidas";
+        els.scoreLabel.textContent = "Aciertos: 0";
+        els.mistakesLabel.textContent = "Fallos: 0";
+        els.quizStage.className = "quiz-stage empty-state";
+        els.quizStage.textContent = "Selecciona un tema para empezar la sesión.";
+        return;
+      }
+
+      els.quizTitle.textContent = theme.tema;
+      els.modePill.textContent = modeLabel(appState.session.mode);
+
+      const total = theme.preguntas.length;
+      const answeredCount = appState.session.answered.length;
+      const masteredCount = appState.session.completedIds.length;
+      const progressSource = appState.session.mode === "infinite" ? masteredCount : answeredCount;
+      const progress = total ? (progressSource / total) * 100 : 0;
+
+      els.progressBar.style.width = `${Math.min(progress, 100)}%`;
+      els.progressLabel.textContent = appState.session.mode === "infinite"
+        ? `${masteredCount} / ${total} dominadas`
+        : `${answeredCount} / ${total} respondidas`;
+      els.scoreLabel.textContent = `Aciertos: ${appState.session.score}`;
+      els.mistakesLabel.textContent = `Fallos: ${appState.session.mistakes}`;
+
+      els.quizStage.className = "quiz-stage";
+      els.quizStage.innerHTML = "";
+
+      if (appState.session.status === "finished") {
+        els.quizStage.appendChild(renderSummaryCard(theme));
+        return;
+      }
+
+      const question = getQuestionById(theme, appState.session.currentQuestionId);
+      if (!question) {
+        els.quizStage.className = "quiz-stage empty-state";
+        els.quizStage.textContent = "No hay una pregunta activa.";
+        return;
+      }
+
+      els.quizStage.appendChild(renderQuestionCard(question));
+    }
+
+    function renderQuestionCard(question) {
+      const wrapper = document.createElement("article");
+      wrapper.className = "question-card";
+
+      const queuePosition = Math.max(appState.session.answered.length + 1, 1);
+      const alreadyAnswered = appState.session.answeredMap[question.id];
+
+      wrapper.innerHTML = `
+        <div class="question-meta">
+          <span>Pregunta ${queuePosition}</span>
+          <span>ID ${question.id}</span>
+          <span>Ronda ${appState.session.round}</span>
+        </div>
+        <h3 class="question-text">${escapeHtml(question.pregunta)}</h3>
+        <div class="options-grid"></div>
+      `;
+
+      const optionsGrid = wrapper.querySelector(".options-grid");
+      const optionOrder = (appState.session.optionOrderMap == null ? void 0 : appState.session.optionOrderMap[question.id]) ?? question.opciones.map((option) => option.key);
+      const options = optionOrder
+        .map((key) => question.opciones.find((option) => option.key === key))
+        .filter(Boolean);
+
+      options.forEach((option) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "option-button";
+        button.innerHTML = `<small>${option.key}</small>${escapeHtml(option.text)}`;
+
+        if (alreadyAnswered && appState.session.instantFeedback) {
+          if (option.key === question.respuesta_correcta) {
+            button.classList.add("correct");
+          } else if (option.key === alreadyAnswered.selected) {
+            button.classList.add("incorrect");
+          }
+          button.disabled = true;
+        } else {
+          button.addEventListener("click", () => submitAnswer(question.id, option.key));
+        }
+
+        optionsGrid.appendChild(button);
+      });
+
+      if (alreadyAnswered && appState.session.instantFeedback) {
+        const feedback = document.createElement("div");
+        feedback.className = `feedback-box ${alreadyAnswered.correct ? "good" : "bad"}`;
+        feedback.innerHTML = alreadyAnswered.correct
+          ? `<strong>Correcta.</strong> La respuesta era ${question.respuesta_correcta}.`
+          : `<strong>Incorrecta.</strong> Marcaste ${alreadyAnswered.selected} y la correcta es ${question.respuesta_correcta}.`;
+        wrapper.appendChild(feedback);
+
+        const actions = document.createElement("div");
+        actions.className = "session-actions";
+
+        const nextButton = document.createElement("button");
+        nextButton.type = "button";
+        nextButton.className = "primary-button";
+        nextButton.textContent = alreadyAnswered.finishedSession ? "Ver resumen" : "Siguiente";
+        nextButton.addEventListener("click", advanceAfterFeedback);
+
+        actions.appendChild(nextButton);
+        wrapper.appendChild(actions);
+      }
+
+      return wrapper;
+    }
+
+    function submitAnswer(questionId, selectedKey) {
+      const theme = getActiveTheme();
+      const question = getQuestionById(theme, questionId);
+      if (!theme || !question || appState.session.status !== "active") {
+        return;
+      }
+
+      const correct = selectedKey === question.respuesta_correcta;
+      const answerSnapshot = {
+        questionId,
+        questionText: question.pregunta,
+        selected: selectedKey,
+        correctKey: question.respuesta_correcta,
+        correct,
+        round: appState.session.round,
+        finishedSession: false,
+      };
+
+      appState.session.attempts += 1;
+      appState.session.answered.push(answerSnapshot);
+      appState.session.answeredMap[questionId] = answerSnapshot;
+
+      if (correct) {
+        appState.session.score += 1;
+        if (!appState.session.completedIds.includes(questionId)) {
+          appState.session.completedIds.push(questionId);
+        }
+      } else {
+        appState.session.mistakes += 1;
+        if (appState.session.mode === "infinite" && !appState.session.pendingRetryIds.includes(questionId)) {
+          appState.session.pendingRetryIds.push(questionId);
+        }
+      }
+
+      const transition = resolveTransition();
+      answerSnapshot.finishedSession = transition.type === "finish";
+
+      if (appState.session.instantFeedback) {
+        appState.session.awaitingAdvance = true;
+        appState.session.pendingTransition = transition;
+      } else {
+        applyTransition(transition);
+      }
+
+      persistSession();
+      renderAll();
+    }
+
+    function resolveTransition() {
+      if (appState.session.mode === "lives" && appState.session.mistakes >= appState.session.maxMistakes) {
+        return { type: "finish", success: false };
+      }
+
+      if (appState.session.mode === "infinite") {
+        return buildInfiniteTransition();
+      }
+
+      return buildLinearTransition();
+    }
+
+    function buildLinearTransition() {
+      const currentIndex = appState.session.queue.indexOf(appState.session.currentQuestionId);
+      const nextQuestionId = appState.session.queue[currentIndex + 1] ?? null;
+
+      if (nextQuestionId) {
+        return { type: "next", nextQuestionId };
+      }
+
+      return { type: "finish", success: true };
+    }
+
+    function buildInfiniteTransition() {
+      const currentIndex = appState.session.queue.indexOf(appState.session.currentQuestionId);
+      const nextQuestionId = appState.session.queue[currentIndex + 1] ?? null;
+
+      if (nextQuestionId) {
+        return { type: "next", nextQuestionId };
+      }
+
+      const totalQuestions = getActiveTheme().preguntas.length;
+      if (appState.session.completedIds.length >= totalQuestions) {
+        return { type: "finish", success: true };
+      }
+
+      const retryIds = appState.session.pendingRetryIds.filter((id) => !appState.session.completedIds.includes(id));
+      const nextQueue = appState.settings.shuffleQuestions ? shuffleArray(retryIds) : retryIds;
+      return { type: "retry-round", nextQueue };
+    }
+
+    function advanceAfterFeedback() {
+      if (!(appState.session == null ? void 0 : appState.session.awaitingAdvance)) {
+        return;
+      }
+
+      applyTransition(appState.session.pendingTransition);
+      persistSession();
+      renderAll();
+    }
+
+    function applyTransition(transition) {
+      appState.session.awaitingAdvance = false;
+      appState.session.pendingTransition = null;
+
+      if (transition.type === "finish") {
+        finishSession(transition.success);
+        return;
+      }
+
+      if (transition.type === "retry-round") {
+        appState.session.pendingRetryIds = [];
+        appState.session.queue = transition.nextQueue;
+        appState.session.currentQuestionId = transition.nextQueue[0] ?? null;
+        appState.session.round += 1;
+        return;
+      }
+
+      appState.session.currentQuestionId = transition.nextQuestionId;
+    }
+
+    function finishSession(success) {
+      appState.session.status = "finished";
+      appState.session.finishedAt = new Date().toISOString();
+
+      const theme = getActiveTheme();
+      const total = theme.preguntas.length;
+      const record = {
+        id: crypto.randomUUID(),
+        theme: theme.tema,
+        themeIndex: appState.activeThemeIndex,
+        mode: appState.session.mode,
+        score: appState.session.score,
+        total,
+        mistakes: appState.session.mistakes,
+        success,
+        finishedAt: appState.session.finishedAt,
+      };
+
+      appState.history.unshift(record);
+      saveJson(STORAGE_KEYS.history, appState.history);
+      persistSession();
+    }
+
+    function renderSummaryCard(theme) {
+      const total = theme.preguntas.length;
+      const success = appState.session.mode === "lives"
+        ? appState.session.mistakes < appState.session.maxMistakes
+        : appState.session.completedIds.length === total || appState.session.score === total;
+      const percentage = total ? Math.round((appState.session.completedIds.length / total) * 100) : 0;
+
+      const card = document.createElement("section");
+      card.className = "summary-card";
+
+      card.innerHTML = `
+        <h3>${success ? "Tema completado" : "Sesión cerrada por fallos"}</h3>
+        <p>
+          ${success
+            ? "Puedes continuar con el siguiente tema o repetir este bloque para mejorar la precisión."
+            : `Has alcanzado el límite de ${appState.session.maxMistakes} fallos. Puedes repetirlo o pasar al siguiente tema.`}
+        </p>
+        <div class="summary-grid">
+          <div class="summary-metric">
+            <span>Aciertos</span>
+            <strong>${appState.session.score}</strong>
+          </div>
+          <div class="summary-metric">
+            <span>Fallos</span>
+            <strong>${appState.session.mistakes}</strong>
+          </div>
+          <div class="summary-metric">
+            <span>Dominio</span>
+            <strong>${percentage}%</strong>
+          </div>
+        </div>
+      `;
+
+      const actions = document.createElement("div");
+      actions.className = "completion-actions";
+
+      const repeatButton = document.createElement("button");
+      repeatButton.type = "button";
+      repeatButton.className = "ghost-button";
+      repeatButton.textContent = "Repetir tema";
+      repeatButton.addEventListener("click", () => startTheme(appState.activeThemeIndex));
+      actions.appendChild(repeatButton);
+
+      const nextIndex = appState.activeThemeIndex + 1;
+      if (nextIndex < appState.themes.length) {
+        const nextButton = document.createElement("button");
+        nextButton.type = "button";
+        nextButton.className = "primary-button";
+        nextButton.textContent = `Seguir con ${appState.themes[nextIndex].tema}`;
+        nextButton.addEventListener("click", () => startTheme(nextIndex));
+        actions.appendChild(nextButton);
+      }
+
+      const backButton = document.createElement("button");
+      backButton.type = "button";
+      backButton.className = "ghost-button";
+      backButton.textContent = "Volver al índice";
+      backButton.addEventListener("click", () => {
+        appState.session = null;
+        localStorage.removeItem(STORAGE_KEYS.session);
+        renderAll();
+      });
+      actions.appendChild(backButton);
+
+      card.appendChild(actions);
+      return card;
+    }
+
+    function renderReview() {
+      if (!(appState.session == null ? void 0 : appState.session.answered.length)) {
+        els.reviewList.className = "review-list empty-state";
+        els.reviewList.textContent = "Aquí aparecerán tus respuestas y las correcciones.";
+        return;
+      }
+
+      els.reviewList.className = "review-list";
+      els.reviewList.innerHTML = "";
+
+      [...appState.session.answered].reverse().forEach((answer, index) => {
+        const card = document.createElement("article");
+        card.className = `review-card ${answer.correct ? "good" : "bad"}`;
+        card.innerHTML = `
+          <p class="review-meta">Intento ${appState.session.answered.length - index} · Ronda ${answer.round}</p>
+          <h3 class="review-title">${escapeHtml(answer.questionText)}</h3>
+          <p class="review-answer ${answer.correct ? "good" : "bad"}">
+            Marcaste ${answer.selected}. Correcta: ${answer.correctKey}.
+          </p>
+        `;
+        els.reviewList.appendChild(card);
+      });
+    }
+
+    function renderHistory() {
+      els.statsHistoryCount.textContent = `${appState.history.length} sesion${appState.history.length === 1 ? "" : "es"}`;
+
+      if (!appState.history.length) {
+        els.historyList.className = "history-list empty-state";
+        els.historyList.textContent = "Todavía no hay sesiones guardadas.";
+        return;
+      }
+
+      els.historyList.className = "history-list";
+      els.historyList.innerHTML = "";
+
+      appState.history.forEach((entry) => {
+        const date = new Date(entry.finishedAt);
+        const card = document.createElement("article");
+        card.className = "history-card";
+        card.innerHTML = `
+          <h3 class="history-title">${escapeHtml(entry.theme)}</h3>
+          <p class="history-meta">${date.toLocaleString("es-ES")}</p>
+          <p>Modo: ${modeLabel(entry.mode)}</p>
+          <p>Puntuación: ${entry.score} / ${entry.total}</p>
+          <p>Fallos: ${entry.mistakes}</p>
+          <p class="history-status ${entry.success ? "good" : "bad"}">${entry.success ? "Completado" : "Cerrado por límite de fallos"}</p>
+        `;
+        els.historyList.appendChild(card);
+      });
+    }
+
+    function getActiveTheme() {
+      if (appState.activeThemeIndex == null) {
+        return null;
+      }
+
+      return appState.themes[appState.activeThemeIndex] ?? null;
+    }
+
+    function getQuestionById(theme, questionId) {
+      return (theme == null ? void 0 : theme.preguntas.find((question) => question.id === questionId)) ?? null;
+    }
+
+    function persistSession() {
+      if (!appState.session) {
+        localStorage.removeItem(STORAGE_KEYS.session);
+        return;
+      }
+
+      saveJson(STORAGE_KEYS.session, appState.session);
+    }
+
+    function saveJson(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function loadJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (_error) {
+        return fallback;
+      }
+    }
+
+    function shuffleArray(items) {
+      const clone = [...items];
+      for (let index = clone.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [clone[index], clone[randomIndex]] = [clone[randomIndex], clone[index]];
+      }
+      return clone;
+    }
+
+    function modeLabel(mode) {
+      if (mode === "infinite") {
+        return "Infinito";
+      }
+
+      if (mode === "lives") {
+        return `Fallos máximos: ${(appState.session == null ? void 0 : appState.session.maxMistakes) ?? appState.settings.maxMistakes}`;
+      }
+
+      return "Normal";
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+  </script>
+</body>
+</html>
